@@ -137,7 +137,7 @@ public class main {
 		list.setSelectedIndex(0);
 		
 		JButton btnParar = new JButton("");
-		btnParar.setIcon(new ImageIcon("D:\\Hobbies\\Workspace\\Teoria TP\\src\\imagenes\\stop.png"));
+		btnParar.setIcon(new ImageIcon("src/imagenes/stop.png"));
 		btnParar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			pausa();
@@ -145,7 +145,7 @@ public class main {
 		});
 		
 		JButton playButton = new JButton("");
-		playButton.setIcon(new ImageIcon("D:\\Hobbies\\Workspace\\Teoria TP\\src\\imagenes\\play.png"));
+		playButton.setIcon(new ImageIcon("src/imagenes/play.png"));
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			play();
