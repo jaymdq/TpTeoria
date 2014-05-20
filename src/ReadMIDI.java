@@ -12,8 +12,20 @@ import javax.sound.midi.Track;
 
 public class ReadMIDI {
 	
+	private static ReadMIDI instancia;
     public static final int NOTE_ON = 0x90;
    
+    private ReadMIDI(){
+    	
+    }
+    
+    public static ReadMIDI getInstance(){
+    	if (instancia == null){
+    		instancia = new ReadMIDI();
+    	}
+    	return instancia;
+    }
+    
     public static Vector<Integer> getNotes(String filename, int track) throws Exception
     {
     	Vector<Integer> v = new Vector<Integer>();
@@ -32,7 +44,8 @@ public class ReadMIDI {
 
 		return v;
     }
-    
+
+    /*
 	public static void main(String[] args) throws Exception {
 		Vector<Integer> notes = getNotes("bigbang.mid", 3);
 		System.out.println("The Big Bang Theory Notes:");
@@ -40,5 +53,6 @@ public class ReadMIDI {
 			System.out.println(note);
 		}
 	}
+	*/
 
 }
