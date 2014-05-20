@@ -28,6 +28,7 @@ import javax.swing.ImageIcon;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import com.jgoodies.forms.factories.FormFactory;
+import javax.swing.JTabbedPane;
 
 
 public class main {
@@ -63,6 +64,7 @@ public class main {
 	 */
 	private void initialize() {
 		frmTpTeora = new JFrame();
+		frmTpTeora.getContentPane().setBackground(new Color(255, 255, 153));
 		frmTpTeora.setTitle("TP Teor\u00EDa");
 		frmTpTeora.setBounds(100, 100, 450, 300);
 		frmTpTeora.setResizable(false);
@@ -155,6 +157,36 @@ public class main {
 		
 		panel.add(playButton, "4, 6, left, top");
 		panel.add(btnParar, "6, 6");
+		
+		JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
+		tabs.setBorder(new LineBorder(new Color(0, 0, 0)));
+		frmTpTeora.getContentPane().add(tabs, BorderLayout.CENTER);
+		
+		JPanel pan1 = new JPanel();
+		pan1.setBackground(Color.WHITE);
+		tabs.addTab("Ej 1", null, pan1, null);
+		
+		JPanel pan2 = new JPanel();
+		pan2.setBackground(new Color(255, 255, 255));
+		tabs.addTab("Ej 2", null, pan2, null);
+		
+		JPanel pan3 = new JPanel();
+		pan3.setBackground(new Color(255, 255, 255));
+		tabs.addTab("Ej 3", null, pan3, null);
+	
+		JPanel pan4 = new JPanel();
+		pan4.setBackground(new Color(255, 255, 255));
+		tabs.addTab("Ej 4", null, pan4, null);
+		
+		JPanel pan5 = new JPanel();
+		pan5.setBackground(new Color(255, 255, 255));
+		tabs.addTab("Ej 5", null, pan5, null);
+		
+		JPanel pan6 = new JPanel();
+		pan6.setBackground(new Color(255, 255, 255));
+		tabs.addTab("Ej 6", null, pan6, null);
+		
+	
 		
 		//frmMeatAnalyzer.setIconImage(Toolkit.getDefaultToolkit().getImage("icono.png"));
 		
