@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
 
+import algoritmos.function;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
@@ -334,6 +336,11 @@ public class main {
 		resultados.add("en un formato");
 		resultados.add("[#Pos] Nombre [Track]");
 		
+		
+		int[] a = {1,2,3,4};
+		int[] b = {1,2,3,5};
+		double c = function.CoeficienteDeCorrelacion(a, b);
+		System.out.println("Correlacion " + c);
 		//----
 		
 		
