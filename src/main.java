@@ -337,8 +337,8 @@ public class main {
 		resultados.add("[#Pos] Nombre [Track]");
 		
 		
-		int[] a = {1,2,3};
-		int[] b = {3,2,1};
+		int[] a = {1,2,2};
+		int[] b = {1,3,3};
 		
 		double c = function.CoeficienteDeCorrelacion(a, b);
 		System.out.println("Resultado Final " + c);

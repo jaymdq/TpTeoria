@@ -40,10 +40,15 @@ public final class function {
 	public static double Varianza(int[] valores){
 		double media = Media(valores);
 		double result=0;
-		HashMap<Integer,Double> prob= Probabilidades(valores);
+		/*HashMap<Integer,Double> prob= Probabilidades(valores);
 		for (int i=0 ; i < valores.length ; i++){
 			result +=  Math.pow(valores[i]-media , 2) * prob.get(valores[i]);
-		}		
+		}		*/
+		double aux1=0.0;
+		for(int n : valores){
+			aux1 += n*n;
+		}
+		result= aux1- Math.pow(media, 2);
 		return result;
 	}
 
@@ -67,8 +72,13 @@ public final class function {
 	
 	public static double Covarianza(int[] valores1, int[] valores2){
 		double result = 0.0;
-		double correlacion = Correlacion(valores1,valores2);
-		result = correlacion - ( Media(valores1) * Media(valores2) );
+		double aux=0.0;
+		/*double correlacion = Correlacion(valores1,valores2);
+		result = correlacion - ( Media(valores1) * Media(valores2) );*/
+		for (int i=0; i < valores1.length; i++){  //los dos tracks son del mismo tamaño
+				aux += valores1[i]*valores2[i];
+		}
+		result= aux - (Media(valores1) * Media(valores2));
 		return result;
 	}
 	
