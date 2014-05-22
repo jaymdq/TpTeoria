@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JLabel;
@@ -59,6 +60,7 @@ public class main {
 	private JList<String> list;
 	private JList<String> ej1Resultado;
 	private JList<String> ej1TemasComparar;
+	private Choice ej1TemaReferencia;
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -240,7 +242,7 @@ public class main {
 		lblSeleccionarTemasA.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan1.add(lblSeleccionarTemasA, "6, 2, 4, 1");
 		
-		Choice ej1TemaReferencia = new Choice();
+		ej1TemaReferencia = new Choice();
 		ej1TemaReferencia.setForeground(new Color(0, 153, 0));
 		ej1TemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan1.add(ej1TemaReferencia, "2, 4");
@@ -318,8 +320,47 @@ public class main {
 		//frmMeatAnalyzer.setIconImage(Toolkit.getDefaultToolkit().getImage("icono.png"));
 		
 	}
-
-
+	
+	//estructuras usadas por comparar
+	HashMap<String,Vector<Integer>> songs= new HashMap<String,Vector<Integer>>();
+	Vector<Pair<String,Double>> valores= new Vector<Pair<String,Double>>();
+	
+	
+	protected int getTrack(String name){
+		if (name == "Game_Of_Thrones.mid"){
+			return TRACK_GOF;
+		}
+		else if (name == "Damas_Gratis.mid"){
+				return TRACK_DG;
+			 }
+			 else if (name == "Juego_De_Capos.mid"){
+				 return TRACK_JDC;
+			 	 }
+			 	else if (name == "The_Big Bang_Theory.mid"){
+			 		    return TRACK_TBBT;
+			 	}
+			 	else if (name == "The_Simpsons.mid"){
+			 		return TRACK_TS;
+			 	}
+			 	else
+			 		return TRACK_YB;
+	}
+	
+	protected void insOrdenado(String clave, double value){
+		boolean insertado=false;
+		for (int i=0; i<valores.size() && !insertado; i++){
+			if (valores.elementAt(i).compareTo(value) == -1){
+				Pair nuev = new Pair<String,Double>(clave,value);
+				valores.insertElementAt(nuev, i);
+				insertado=true;
+			}
+		}
+		if (!insertado){
+			Pair nuev = new Pair<String,Double>(clave,value);
+			valores.add(nuev);
+		}
+	}
+	
 	protected void ej1Procesar() {
 		//Método que compara y obtiene los temas con mayor similitud al tema referencia.
 		
@@ -328,22 +369,44 @@ public class main {
 		Vector<String> resultados = new Vector<String>();
 		
 		
-		//Procesar
-		resultados.add("Aca");
-		resultados.add("van");
-		resultados.add("los");
-		resultados.add("resultados");
-		resultados.add("en un formato");
-		resultados.add("[#Pos] Nombre [Track]");
+		//Tema de Referencia
+		try {
+			Vector<Integer> track= ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),TRACK_GOF);
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			
+		} catch (Exception e) {}
 		
 		
-		int[] a = {1,2,2};
-		int[] b = {1,3,3};
+		//Temas a Comparar
+		for(String cancion : ej1TemasComparar.getSelectedValuesList()){
+			try {
+				Vector<Integer> track= ReadMIDI.getInstance().getNotes("src/midis/" + cancion,this.getTrack(cancion));
+				for ( int i = 0 ; i < track.size() ; i++){
+					int h = track.elementAt(i) / 10;
+					track.set(i, h);
+				}
+				songs.put(cancion, track);
+			} catch (Exception e) {}
+		}
 		
-		double c = function.CoeficienteDeCorrelacion(a, b);
-		System.out.println("Resultado Final " + c);
-		//----
 		
+		//Comparo
+		for (String clave : songs.keySet()){
+			Vector<Integer> trackseleccionado=songs.get(clave);
+			if (clave.compareTo((String)ej1TemaReferencia.getSelectedItem()) != 0){
+				double res = function.CoeficienteDeCorrelacion(songs.get(ej1TemaReferencia.getSelectedItem()), trackseleccionado);
+				insOrdenado(clave,res);
+			}
+		}
+		
+		//MUESTRO RESULTADO D COMPARAR
+		for (int i=0; i < valores.size(); i++){
+			resultados.add("Pos:"+i+""+valores.elementAt(i).getFirst()+""+"Valor:"+valores.elementAt(i).getSecond());
+		}
 		
 		//Muestro los resultados
 		for (String s : resultados){
@@ -352,6 +415,14 @@ public class main {
 		ej1Resultado.setModel(modeloRes1);
 		
 	}
+	
+	protected void ej2Procesar(){
+		//Método que calcula media y desvio del tema de referencia y de la cancion mas y 
+		//menos parecida. Luego genera el histograma
+		
+		
+	}
+	
 
 	protected void pausa() {
 		// Método que para la canción que se está reproduciendo.
