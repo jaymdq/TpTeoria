@@ -19,7 +19,7 @@ public final class function {
 		HashMap<Integer,Integer> result= new HashMap<Integer,Integer>();
 		for (int i=0; i<valores.length; i++){
 			if (result.containsKey(valores[i])) {
-				result.put(valores[i], result.get(valores[i]+1));
+				result.put(valores[i], result.get(valores[i])+1);
 			}
 			else {
 				result.put(valores[i], 1);
@@ -38,11 +38,11 @@ public final class function {
 	}
 	
 	public static double Varianza(int[] valores){
-		double media= Media(valores);
+		double media = Media(valores);
 		double result=0;
 		HashMap<Integer,Double> prob= Probabilidades(valores);
 		for (int i=0 ; i < valores.length ; i++){
-			result+=(Math.pow(valores[i]-media,2))*prob.get(valores[i]);
+			result +=  Math.pow(valores[i]-media , 2) * prob.get(valores[i]);
 		}		
 		return result;
 	}
@@ -57,25 +57,23 @@ public final class function {
 		double result = 0.0;
 		HashMap<Integer,Double> p1= Probabilidades(valores1);
 		HashMap<Integer,Double> p2= Probabilidades(valores2);
-		for (int i=0; i < valores1.length; i++){
-			for (int j=0; j < valores2.length; j++){
-				result += (double) ( valores1[i] * valores2[j] * p1.get(valores1[i]) * p2.get(valores2[j]) );
+		for (Integer i : p1.keySet()){
+			for (Integer j : p2.keySet()){
+				result += (double) ( i * j * p1.get(i) * p2.get(j) );
 			}  //valores1 y valores 2 son independientes sus probabilidades
 		}
 		return result;
 	}
 	
-	
 	public static double Covarianza(int[] valores1, int[] valores2){
 		double result = 0.0;
 		double correlacion = Correlacion(valores1,valores2);
-		result = correlacion - Media(valores1) * Media(valores2);
-		System.out.println(correlacion);
+		result = correlacion - ( Media(valores1) * Media(valores2) );
 		return result;
 	}
 	
 	public static double  CoeficienteDeCorrelacion(int[] valores1, int[] valores2){
-		return (double) ((double) Covarianza(valores1,valores2) / ( Desvio(valores1) * Desvio(valores2) ) );
+		return (double) ( (double) Covarianza(valores1,valores2) / (Desvio(valores1) * Desvio(valores2) )  );
 	}
 }
  

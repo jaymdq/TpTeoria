@@ -337,12 +337,11 @@ public class main {
 		resultados.add("[#Pos] Nombre [Track]");
 		
 		
-		int[] a = {1,2,3,4};
-		int[] b = {1,2,3,4};
-		double m= function.Media(a);
-		System.out.println(m);
+		int[] a = {1,2,3};
+		int[] b = {3,2,1};
+		
 		double c = function.CoeficienteDeCorrelacion(a, b);
-		System.out.println("Correlacion " + c);
+		System.out.println("Resultado Final " + c);
 		//----
 		
 		
