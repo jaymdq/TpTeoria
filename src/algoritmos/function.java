@@ -70,11 +70,12 @@ public final class function {
 		double result = 0.0;
 		double correlacion = Correlacion(valores1,valores2);
 		result = correlacion - Media(valores1) * Media(valores2);
+		System.out.println(correlacion);
 		return result;
 	}
 	
 	public static double  CoeficienteDeCorrelacion(int[] valores1, int[] valores2){
-		return (double) ( Covarianza(valores1,valores2) / ( Desvio(valores1) * Desvio(valores2) ) );
+		return (double) ((double) Covarianza(valores1,valores2) / ( Desvio(valores1) * Desvio(valores2) ) );
 	}
 }
  

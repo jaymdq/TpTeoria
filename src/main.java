@@ -338,7 +338,9 @@ public class main {
 		
 		
 		int[] a = {1,2,3,4};
-		int[] b = {1,2,3,5};
+		int[] b = {1,2,3,4};
+		double m= function.Media(a);
+		System.out.println(m);
 		double c = function.CoeficienteDeCorrelacion(a, b);
 		System.out.println("Correlacion " + c);
 		//----
