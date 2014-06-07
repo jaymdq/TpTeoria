@@ -74,12 +74,12 @@ public final class function {
 	public static double Covarianza(Vector<Integer> valores1, Vector<Integer> valores2){
 		double result = 0.0;
 		double aux=0.0;
-		/*double correlacion = Correlacion(valores1,valores2);
-		result = correlacion - ( Media(valores1) * Media(valores2) );*/
-		for (int i=0; i < valores1.size() || i<=250; i++){  //los dos tracks son del mismo tamaño
-				aux += valores1.elementAt(i)*valores2.elementAt(i);
+		double correlacion = Correlacion(valores1,valores2);
+		result = correlacion - ( Media(valores1) * Media(valores2) );
+	/*	for (int i=0; i < valores1.size() || i<=250; i++){  //los dos tracks son del mismo tamaño
+				aux += valores1.elementAt(i) * valores2.elementAt(i);
 		}
-		result= aux - (Media(valores1) * Media(valores2));
+		result= aux - (Media(valores1) * Media(valores2));*/
 		return result;
 	}
 	

@@ -26,7 +26,7 @@ public class ReadMIDI {
     	return instancia;
     }
     
-    public static Vector<Integer> getNotes(String filename, int track) throws Exception
+    public Vector<Integer> getNotes(String filename, int track) throws Exception
     {
     	Vector<Integer> v = new Vector<Integer>();
     	Sequence sequence = MidiSystem.getSequence(new File(filename));

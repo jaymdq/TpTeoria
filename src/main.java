@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -52,6 +53,9 @@ import java.awt.FlowLayout;
 
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JMenuItem;
+import javax.swing.AbstractListModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 public class main {
@@ -61,6 +65,7 @@ public class main {
 	private JList<String> ej1Resultado;
 	private JList<String> ej1TemasComparar;
 	private Choice ej1TemaReferencia;
+	private JButton ej1Procesar;
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -207,10 +212,10 @@ public class main {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("175dlu"),
+				ColumnSpec.decode("220dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
-				ColumnSpec.decode("4dlu:grow"),},
+				ColumnSpec.decode("30dlu"),},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -229,9 +234,11 @@ public class main {
 				RowSpec.decode("16dlu"),
 				FormFactory.DEFAULT_ROWSPEC,
 				RowSpec.decode("16dlu"),
-				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(80dlu;default)"),
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(30dlu;default)"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(70dlu;default)"),
 				FormFactory.RELATED_GAP_ROWSPEC,}));
 		
 		JLabel lblNewLabel = new JLabel("Seleccionar Tema de Referencia");
@@ -253,6 +260,14 @@ public class main {
 		ej1TemaReferencia.select(1);
 		
 		ej1TemasComparar = new JList<String>();
+		ej1TemasComparar.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				if (ej1TemasComparar.isSelectionEmpty()){
+					ej1Procesar.setEnabled(false);
+				}else
+					ej1Procesar.setEnabled(true);
+			}
+		});
 		ej1TemasComparar.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		ej1TemasComparar.setForeground(new Color(0, 0, 0));
 		ej1TemasComparar.setFont(new Font("Verdana", Font.BOLD, 16));
@@ -279,7 +294,8 @@ public class main {
 		ej1Resultado.setFont(new Font("Verdana", Font.BOLD, 16));
 		DefaultListModel<String> modeloRes1 = new DefaultListModel<String>();
 		
-		JButton ej1Procesar = new JButton("Procesar");
+		ej1Procesar = new JButton("Procesar");
+		ej1Procesar.setEnabled(false);
 		ej1Procesar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			ej1Procesar();
@@ -292,8 +308,25 @@ public class main {
 		ej1Procesar.setIcon(new ImageIcon(main.class.getResource("/imagenes/process.png")));
 		ej1Procesar.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan1.add(ej1Procesar, "2, 18");
-		ej1Resultado.setModel(modeloRes1);
+		ej1Resultado.setModel(new AbstractListModel() {
+			String[] values = new String[] {"1.", "2.", "3.", "4.", "5.", "6."};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
 		pan1.add(ej1Resultado, "6, 18, fill, top");
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setForeground(Color.BLACK);
+		pan1.add(separator_2, "1, 20, 9, 1");
+		
+		JLabel lblAsdasd = new JLabel("<html>Ejercicio 1) Dado el tema de apertura de la serie Game of Thrones (tema de referencia) y una lista de canciones seleccionadas por la empresa, implementar un algoritmo que permita ordenar estas \u00FAltimas seg\u00FAn su parecido con el tema original, utilizando el factor de correlaci\u00F3n como medida de similitud. </html>");
+		lblAsdasd.setFont(new Font("Verdana", Font.BOLD, 16));
+		lblAsdasd.setVerticalAlignment(SwingConstants.TOP);
+		pan1.add(lblAsdasd, "2, 22, 6, 1, default, top");
 		
 		JPanel pan2 = new JPanel();
 		pan2.setBackground(new Color(255, 255, 255));
@@ -321,44 +354,55 @@ public class main {
 		
 	}
 	
-	//estructuras usadas por comparar
-	HashMap<String,Vector<Integer>> songs= new HashMap<String,Vector<Integer>>();
-	Vector<Pair<String,Double>> valores= new Vector<Pair<String,Double>>();
 	
-	
+	//Método que te devuelve el track para la canción pasada por parámetro.
 	protected int getTrack(String name){
-		if (name == "Game_Of_Thrones.mid"){
+		if (name.equals("Game Of Thrones.mid")){
 			return TRACK_GOF;
 		}
-		else if (name == "Damas_Gratis.mid"){
-				return TRACK_DG;
-			 }
-			 else if (name == "Juego_De_Capos.mid"){
-				 return TRACK_JDC;
-			 	 }
-			 	else if (name == "The_Big Bang_Theory.mid"){
-			 		    return TRACK_TBBT;
-			 	}
-			 	else if (name == "The_Simpsons.mid"){
-			 		return TRACK_TS;
-			 	}
-			 	else
-			 		return TRACK_YB;
+		else 
+		if (name.equals("Damas Gratis.mid")){
+			return TRACK_DG;
+		}
+		else 
+		if (name.equals("Juego De Capos.mid")){
+			return TRACK_JDC;
+		}
+		else
+		if (name.equals("The Big Bang Theory.mid")){
+		    return TRACK_TBBT;
+		}
+		else
+		if (name.equals("The Simpsons.mid")){
+			return TRACK_TS;
+	 	}
+		else 
+			return TRACK_YB;
 	}
 	
-	protected void insOrdenado(String clave, double value){
+	protected Vector<Pair<String,Double>> insOrdenado(String clave, double value,Vector<Pair<String,Double>> valores){
 		boolean insertado=false;
-		for (int i=0; i<valores.size() && !insertado; i++){
+		for (int i = 0; i < valores.size() && !insertado; i++){
 			if (valores.elementAt(i).compareTo(value) == -1){
-				Pair nuev = new Pair<String,Double>(clave,value);
-				valores.insertElementAt(nuev, i);
+				Pair<String, Double> nuevo = new Pair<String,Double>(clave,value);
+				valores.insertElementAt(nuevo, i);
 				insertado=true;
 			}
 		}
 		if (!insertado){
-			Pair nuev = new Pair<String,Double>(clave,value);
-			valores.add(nuev);
+			Pair<String, Double> nuevo = new Pair<String,Double>(clave,value);
+			valores.add(nuevo);
 		}
+		return valores;
+	}
+	
+	
+	protected Vector<Integer> get250(Vector<Integer> entrada){
+		Vector<Integer> salida = new Vector<Integer>();
+		for (int i = 0 ; i < 250 ; i++){
+			salida.add(entrada.get(i));
+		}
+		return salida;
 	}
 	
 	protected void ej1Procesar() {
@@ -367,24 +411,29 @@ public class main {
 		//Modelo utilizado para mostrar los resultados finales
 		DefaultListModel<String> modeloRes1 = new DefaultListModel<String>();
 		Vector<String> resultados = new Vector<String>();
+		Vector<Integer> trackReferencia = null;
+		
+		//estructuras usadas por comparar
+		HashMap<String,Vector<Integer>> songs= new HashMap<String,Vector<Integer>>();
+		Vector<Pair<String,Double>> valores= new Vector<Pair<String,Double>>();
 		
 		
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),TRACK_GOF);
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),TRACK_GOF));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			songs.put(ej1TemaReferencia.getSelectedItem(), track);
-			
+			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			trackReferencia = track;
 		} catch (Exception e) {}
 		
 		
 		//Temas a Comparar
 		for(String cancion : ej1TemasComparar.getSelectedValuesList()){
 			try {
-				Vector<Integer> track= ReadMIDI.getInstance().getNotes("src/midis/" + cancion,this.getTrack(cancion));
+				Vector<Integer> track = get250(ReadMIDI.getInstance().getNotes("src/midis/" + cancion,this.getTrack(cancion)));
 				for ( int i = 0 ; i < track.size() ; i++){
 					int h = track.elementAt(i) / 10;
 					track.set(i, h);
@@ -396,19 +445,19 @@ public class main {
 		
 		//Comparo
 		for (String clave : songs.keySet()){
-			Vector<Integer> trackseleccionado=songs.get(clave);
-			if (clave.compareTo((String)ej1TemaReferencia.getSelectedItem()) != 0){
-				double res = function.CoeficienteDeCorrelacion(songs.get(ej1TemaReferencia.getSelectedItem()), trackseleccionado);
-				insOrdenado(clave,res);
-			}
+			Vector<Integer> trackSeleccionado = songs.get(clave);
+			double res = function.CoeficienteDeCorrelacion(trackReferencia, trackSeleccionado);
+			insOrdenado(clave,res,valores);
 		}
-		
-		//MUESTRO RESULTADO D COMPARAR
+
+		DecimalFormat df = new DecimalFormat("0.0000");
+		//Muestro resultados de haber comparado
 		for (int i=0; i < valores.size(); i++){
-			resultados.add("Pos:"+i+""+valores.elementAt(i).getFirst()+""+"Valor:"+valores.elementAt(i).getSecond());
+			resultados.add("["+ (i+1) +"]: " + valores.elementAt(i).getFirst() +" , [Valor]: " + df.format(valores.elementAt(i).getSecond()) );
 		}
 		
 		//Muestro los resultados
+		modeloRes1.clear();
 		for (String s : resultados){
 			modeloRes1.addElement(s);
 		}
