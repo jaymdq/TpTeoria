@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.HashMap;
 import java.util.Vector;
 
 import javax.sound.midi.MidiEvent;
@@ -33,7 +32,7 @@ public class ReadMIDI {
     	Track t = sequence.getTracks()[track];
         for (int i=0; i < t.size(); i++) { 
                 MidiEvent event = t.get(i);
-                MidiMessage message = event.getMessage();
+               MidiMessage message = event.getMessage();
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() == NOTE_ON) {

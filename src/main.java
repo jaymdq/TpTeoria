@@ -1,12 +1,7 @@
 import java.awt.EventQueue;
 import java.awt.Font;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Track;
 import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -31,7 +26,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Vector;
@@ -49,13 +43,10 @@ import java.awt.Choice;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JSeparator;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JMenuItem;
 import javax.swing.AbstractListModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.JComboBox;
 
 
 public class main {
@@ -66,6 +57,7 @@ public class main {
 	private JList<String> ej1TemasComparar;
 	private Choice ej1TemaReferencia;
 	private JButton ej1Procesar;
+	private JLabel txtRes1;
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -231,14 +223,16 @@ public class main {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("5dlu"),
+				RowSpec.decode("max(6dlu;default)"),
 				RowSpec.decode("16dlu"),
+				RowSpec.decode("max(101dlu;default)"),
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
-				RowSpec.decode("16dlu"),
-				RowSpec.decode("max(80dlu;default)"),
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(30dlu;default)"),
+				RowSpec.decode("max(13dlu;default)"),
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(70dlu;default)"),
+				RowSpec.decode("max(97dlu;default)"),
 				FormFactory.RELATED_GAP_ROWSPEC,}));
 		
 		JLabel lblNewLabel = new JLabel("Seleccionar Tema de Referencia");
@@ -302,13 +296,17 @@ public class main {
 			}
 		});
 		
-		JLabel lblNewLabel_1 = new JLabel("Resultados ordenados seg\u00FAn similitud");
+		JLabel lblNewLabel_1 = new JLabel("Coeficientes de Correlaci\u00F3n");
 		lblNewLabel_1.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan1.add(lblNewLabel_1, "6, 17, default, top");
 		ej1Procesar.setIcon(new ImageIcon(main.class.getResource("/imagenes/process.png")));
 		ej1Procesar.setFont(new Font("Verdana", Font.BOLD, 16));
-		pan1.add(ej1Procesar, "2, 18");
+		pan1.add(ej1Procesar, "2, 18, default, top");
 		ej1Resultado.setModel(new AbstractListModel() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			String[] values = new String[] {"1.", "2.", "3.", "4.", "5.", "6."};
 			public int getSize() {
 				return values.length;
@@ -319,18 +317,72 @@ public class main {
 		});
 		pan1.add(ej1Resultado, "6, 18, fill, top");
 		
+		txtRes1 = new JLabel("");
+		txtRes1.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan1.add(txtRes1, "2, 20, 5, 1");
+		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setForeground(Color.BLACK);
-		pan1.add(separator_2, "1, 20, 9, 1");
+		pan1.add(separator_2, "1, 22, 9, 1");
 		
 		JLabel lblAsdasd = new JLabel("<html>Ejercicio 1) Dado el tema de apertura de la serie Game of Thrones (tema de referencia) y una lista de canciones seleccionadas por la empresa, implementar un algoritmo que permita ordenar estas \u00FAltimas seg\u00FAn su parecido con el tema original, utilizando el factor de correlaci\u00F3n como medida de similitud. </html>");
 		lblAsdasd.setFont(new Font("Verdana", Font.BOLD, 16));
 		lblAsdasd.setVerticalAlignment(SwingConstants.TOP);
-		pan1.add(lblAsdasd, "2, 22, 6, 1, default, top");
+		pan1.add(lblAsdasd, "2, 24, 6, 1, default, top");
 		
 		JPanel pan2 = new JPanel();
 		pan2.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 2", null, pan2, null);
+		pan2.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		JLabel lblTemaReferencia = new JLabel("Tema Referencia");
+		lblTemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblTemaReferencia, "2, 2, left, default");
+		
+		Choice ej2TemaReferencia = new Choice();
+		ej2TemaReferencia.setForeground(Color.GREEN);
+		ej2TemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2TemaReferencia, "4, 2, left, default");
+		for ( int i = 0 ; i < list.getModel().getSize();i++){
+			ej2TemaReferencia.add(list.getModel().getElementAt(i));
+		}
+		//Dejar seleccionado Game of Thrones
+		ej2TemaReferencia.select(1);
+		
+		
+		JLabel lblTemaMsParecido = new JLabel("Tema m\u00E1s parecido");
+		lblTemaMsParecido.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblTemaMsParecido, "2, 4, left, default");
+		
+		Choice ej2TemaMasParecido = new Choice();
+		ej2TemaMasParecido.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2TemaMasParecido, "4, 4, left, default");
+		for ( int i = 0 ; i < list.getModel().getSize();i++){
+			ej2TemaMasParecido.add(list.getModel().getElementAt(i));
+		}
+		
+		JLabel lblTemaMenosParecido = new JLabel("Tema menos parecido");
+		lblTemaMenosParecido.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblTemaMenosParecido, "2, 6, left, default");
+			
+		Choice ej2TemaMenosParecido = new Choice();
+		ej2TemaMenosParecido.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2TemaMenosParecido, "4, 6, left, default");
+		
+		for ( int i = 0 ; i < list.getModel().getSize();i++){
+			ej2TemaMenosParecido.add(list.getModel().getElementAt(i));
+		}
 		
 		JPanel pan3 = new JPanel();
 		pan3.setBackground(new Color(255, 255, 255));
@@ -416,6 +468,7 @@ public class main {
 		//estructuras usadas por comparar
 		HashMap<String,Vector<Integer>> songs= new HashMap<String,Vector<Integer>>();
 		Vector<Pair<String,Double>> valores= new Vector<Pair<String,Double>>();
+		Vector<Pair<String,Double>> valoresSimilitud= new Vector<Pair<String,Double>>();
 		
 		
 		//Tema de Referencia
@@ -448,9 +501,12 @@ public class main {
 			Vector<Integer> trackSeleccionado = songs.get(clave);
 			double res = function.CoeficienteDeCorrelacion(trackReferencia, trackSeleccionado);
 			insOrdenado(clave,res,valores);
+			insOrdenado(clave,Math.abs(res),valoresSimilitud);
 		}
 
 		DecimalFormat df = new DecimalFormat("0.0000");
+		Double masParecido = 0.0;
+		Double menosParecido = 1.0;
 		//Muestro resultados de haber comparado
 		for (int i=0; i < valores.size(); i++){
 			resultados.add("["+ (i+1) +"]: " + valores.elementAt(i).getFirst() +" , [Valor]: " + df.format(valores.elementAt(i).getSecond()) );
@@ -462,6 +518,8 @@ public class main {
 			modeloRes1.addElement(s);
 		}
 		ej1Resultado.setModel(modeloRes1);
+		
+		txtRes1.setText("Tema más parecido : \"" + valoresSimilitud.elementAt(0).getFirst() + "\" , Tema menos parecido : \"" + valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst() + "\".");
 		
 	}
 	
