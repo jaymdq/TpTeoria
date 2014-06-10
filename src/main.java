@@ -1,6 +1,9 @@
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
 
+import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -42,11 +45,14 @@ import java.awt.Choice;
 
 import javax.swing.border.EtchedBorder;
 import javax.swing.JSeparator;
-
 import javax.swing.AbstractListModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JComboBox;
+
+import java.awt.FlowLayout;
+
+import com.jgoodies.forms.layout.Sizes;
 
 
 public class main {
@@ -58,6 +64,16 @@ public class main {
 	private Choice ej1TemaReferencia;
 	private JButton ej1Procesar;
 	private JLabel txtRes1;
+	private Choice ej2TemaMasParecido;
+	private Choice ej2TemaReferencia;
+	private Choice ej2TemaMenosParecido;
+	private JLabel BarraDeEstado;
+	private JLabel ej2MediaMenos;
+	private JLabel ej2MediaMas;
+	private JLabel ej2MediaReferencia;
+	private JLabel ej2DesvioMenos;
+	private JLabel ej2DesvioMas;
+	private JLabel ej2DesvioRef;
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -116,6 +132,19 @@ public class main {
 		JMenu mnAcercaDe = new JMenu("Acerca de");
 		menuBar.add(mnAcercaDe);
 		frmTpTeora.getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		JPanel Barra = new JPanel();
+		Barra.setBackground(new Color(255, 255, 153));
+		FlowLayout flowLayout = (FlowLayout) Barra.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEADING);
+		Barra.setBorder(new LineBorder(new Color(0, 0, 0)));
+		frmTpTeora.getContentPane().add(Barra, BorderLayout.SOUTH);
+		
+		BarraDeEstado = new JLabel("Ejecute el ejercicio 1 para definir el tema de referencia y los m\u00E1s y menos parecidos.");
+		BarraDeEstado.setForeground(new Color(255, 0, 0));
+		BarraDeEstado.setHorizontalAlignment(SwingConstants.LEADING);
+		BarraDeEstado.setFont(new Font("Verdana", Font.BOLD, 16));
+		Barra.add(BarraDeEstado);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 153));
@@ -325,10 +354,10 @@ public class main {
 		separator_2.setForeground(Color.BLACK);
 		pan1.add(separator_2, "1, 22, 9, 1");
 		
-		JLabel lblAsdasd = new JLabel("<html>Ejercicio 1) Dado el tema de apertura de la serie Game of Thrones (tema de referencia) y una lista de canciones seleccionadas por la empresa, implementar un algoritmo que permita ordenar estas \u00FAltimas seg\u00FAn su parecido con el tema original, utilizando el factor de correlaci\u00F3n como medida de similitud. </html>");
-		lblAsdasd.setFont(new Font("Verdana", Font.BOLD, 16));
-		lblAsdasd.setVerticalAlignment(SwingConstants.TOP);
-		pan1.add(lblAsdasd, "2, 24, 6, 1, default, top");
+		JLabel Ejercicio1Texto = new JLabel("<html>Ejercicio 1) Dado el tema de apertura de la serie Game of Thrones (tema de referencia) y una lista de canciones seleccionadas por la empresa, implementar un algoritmo que permita ordenar estas \u00FAltimas seg\u00FAn su parecido con el tema original, utilizando el factor de correlaci\u00F3n como medida de similitud. </html>");
+		Ejercicio1Texto.setFont(new Font("Verdana", Font.BOLD, 16));
+		Ejercicio1Texto.setVerticalAlignment(SwingConstants.TOP);
+		pan1.add(Ejercicio1Texto, "2, 24, 6, 1, default, top");
 		
 		JPanel pan2 = new JPanel();
 		pan2.setBackground(new Color(255, 255, 255));
@@ -337,8 +366,27 @@ public class main {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.MINIMUM, Sizes.constant("35dlu", true), Sizes.constant("70dlu", true)), 0),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("35dlu", true), Sizes.constant("70dlu", true)), 0),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -350,7 +398,7 @@ public class main {
 		lblTemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(lblTemaReferencia, "2, 2, left, default");
 		
-		Choice ej2TemaReferencia = new Choice();
+		ej2TemaReferencia = new Choice();
 		ej2TemaReferencia.setForeground(Color.GREEN);
 		ej2TemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(ej2TemaReferencia, "4, 2, left, default");
@@ -360,25 +408,105 @@ public class main {
 		//Dejar seleccionado Game of Thrones
 		ej2TemaReferencia.select(1);
 		
+		JLabel lblNewLabel_2 = new JLabel("Media: ");
+		lblNewLabel_2.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblNewLabel_2, "6, 2");
+		
+		ej2MediaReferencia = new JLabel("");
+		ej2MediaReferencia.setForeground(new Color(51, 204, 0));
+		ej2MediaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2MediaReferencia, "7, 2");
+		
+		JLabel lblDesvo = new JLabel("Desv\u00EDo: ");
+		lblDesvo.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblDesvo, "10, 2");
+		
+		ej2DesvioRef = new JLabel("");
+		ej2DesvioRef.setForeground(new Color(204, 0, 0));
+		ej2DesvioRef.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2DesvioRef, "12, 2");
+		
+		JButton btnProcesar = new JButton("Procesar");
+		btnProcesar.setFont(new Font("Verdana", Font.BOLD, 16));
+		btnProcesar.setIcon(new ImageIcon(main.class.getResource("/imagenes/process.png")));
+		btnProcesar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ej2Procesar();
+			}
+		});
+		pan2.add(btnProcesar, "14, 2, 1, 5, default, fill");
+		
 		
 		JLabel lblTemaMsParecido = new JLabel("Tema m\u00E1s parecido");
 		lblTemaMsParecido.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(lblTemaMsParecido, "2, 4, left, default");
 		
-		Choice ej2TemaMasParecido = new Choice();
+		ej2TemaMasParecido = new Choice();
 		ej2TemaMasParecido.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(ej2TemaMasParecido, "4, 4, left, default");
 		for ( int i = 0 ; i < list.getModel().getSize();i++){
 			ej2TemaMasParecido.add(list.getModel().getElementAt(i));
 		}
 		
+		JLabel lblNewLabel_3 = new JLabel("Media: ");
+		lblNewLabel_3.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblNewLabel_3, "6, 4");
+		
+		ej2MediaMas = new JLabel("");
+		ej2MediaMas.setForeground(new Color(51, 204, 0));
+		ej2MediaMas.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2MediaMas, "7, 4");
+		
+		JLabel lblNewLabel_4 = new JLabel("Desv\u00EDo: ");
+		lblNewLabel_4.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblNewLabel_4, "10, 4");
+		
+		ej2DesvioMas = new JLabel("");
+		ej2DesvioMas.setForeground(new Color(204, 0, 0));
+		ej2DesvioMas.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2DesvioMas, "12, 4");
+		
 		JLabel lblTemaMenosParecido = new JLabel("Tema menos parecido");
 		lblTemaMenosParecido.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(lblTemaMenosParecido, "2, 6, left, default");
 			
-		Choice ej2TemaMenosParecido = new Choice();
+		ej2TemaMenosParecido = new Choice();
 		ej2TemaMenosParecido.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(ej2TemaMenosParecido, "4, 6, left, default");
+		
+		JLabel lblMedia = new JLabel("Media:");
+		lblMedia.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblMedia, "6, 6");
+		
+		ej2MediaMenos = new JLabel("");
+		ej2MediaMenos.setFont(new Font("Verdana", Font.BOLD, 16));
+		ej2MediaMenos.setForeground(new Color(51, 204, 0));
+		pan2.add(ej2MediaMenos, "7, 6");
+		
+		JLabel lblNewLabel_5 = new JLabel("Desv\u00EDo: ");
+		lblNewLabel_5.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(lblNewLabel_5, "10, 6");
+		
+		ej2DesvioMenos = new JLabel("");
+		ej2DesvioMenos.setForeground(new Color(204, 0, 0));
+		ej2DesvioMenos.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(ej2DesvioMenos, "12, 6");
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setForeground(new Color(0, 0, 0));
+		pan2.add(separator_3, "1, 8, 15, 1, fill, default");
+		
+		JButton btnHistogramaTemaReferencia = new JButton("Histograma Tema Referencia");
+		btnHistogramaTemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(btnHistogramaTemaReferencia, "2, 10, 3, 1");
+		
+		JButton btnHistogramaTemaMs = new JButton("Histograma Tema M\u00E1s Parecido");
+		btnHistogramaTemaMs.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(btnHistogramaTemaMs, "2, 12, 3, 1");
+		
+		JButton btnHistogramaTemaMenos = new JButton("Histograma Tema Menos Parecido");
+		btnHistogramaTemaMenos.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan2.add(btnHistogramaTemaMenos, "2, 14, 3, 1");
 		
 		for ( int i = 0 ; i < list.getModel().getSize();i++){
 			ej2TemaMenosParecido.add(list.getModel().getElementAt(i));
@@ -473,7 +601,7 @@ public class main {
 		
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),TRACK_GOF));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),this.getTrack(ej1TemaReferencia.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -505,8 +633,6 @@ public class main {
 		}
 
 		DecimalFormat df = new DecimalFormat("0.0000");
-		Double masParecido = 0.0;
-		Double menosParecido = 1.0;
 		//Muestro resultados de haber comparado
 		for (int i=0; i < valores.size(); i++){
 			resultados.add("["+ (i+1) +"]: " + valores.elementAt(i).getFirst() +" , [Valor]: " + df.format(valores.elementAt(i).getSecond()) );
@@ -518,14 +644,75 @@ public class main {
 			modeloRes1.addElement(s);
 		}
 		ej1Resultado.setModel(modeloRes1);
+		BarraDeEstado.setForeground(Color.black);
+		BarraDeEstado.setText("Tema más parecido : \"" + valoresSimilitud.elementAt(0).getFirst() + "\" , Tema menos parecido : \"" + valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst() + "\".");
 		
-		txtRes1.setText("Tema más parecido : \"" + valoresSimilitud.elementAt(0).getFirst() + "\" , Tema menos parecido : \"" + valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst() + "\".");
-		
+		//Actualizo campos de demás ejercicios
+		ej2TemaMasParecido.select(valoresSimilitud.elementAt(0).getFirst());
+		ej2TemaMenosParecido.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
 	}
 	
 	protected void ej2Procesar(){
 		//Método que calcula media y desvio del tema de referencia y de la cancion mas y 
 		//menos parecida. Luego genera el histograma
+		
+		Vector<Integer> trackReferencia = null;
+		Vector<Integer> trackMas = null;
+		Vector<Integer> trackMenos = null;
+		
+		
+		//Tema de Referencia
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaReferencia.getSelectedItem(),this.getTrack(ej2TemaReferencia.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			trackReferencia = track;
+		} catch (Exception e) {}
+		
+		//Tema Mas Parecido
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMasParecido.getSelectedItem(),this.getTrack(ej2TemaMasParecido.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			trackMas = track;
+		} catch (Exception e) {}
+		
+		//Tema Menos Parecido
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMenosParecido.getSelectedItem(),this.getTrack(ej2TemaMenosParecido.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			trackMenos = track;
+		} catch (Exception e) {}
+
+
+		DecimalFormat df = new DecimalFormat("0.0000");
+		
+		double MediaReferencia = function.Media(trackReferencia);
+		double MediaMas = function.Media(trackMas);
+		double MediaMenos = function.Media(trackMenos);
+		ej2MediaReferencia.setText(df.format(MediaReferencia));
+		ej2MediaMas.setText(df.format(MediaMas));
+		ej2MediaMenos.setText(df.format(MediaMenos));
+		
+		double DesvioReferencia = function.Desvio(trackReferencia);
+		double DesvioMas = function.Desvio(trackMas);
+		double DesvioMenos = function.Desvio(trackMenos);
+		ej2DesvioRef.setText(df.format(DesvioReferencia));
+		ej2DesvioMas.setText(df.format(DesvioMas));
+		ej2DesvioMenos.setText(df.format(DesvioMenos));
+		
+		
+		
 		
 		
 	}
