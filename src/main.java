@@ -502,6 +502,11 @@ public class main {
 		pan2.add(separator_3, "1, 8, 15, 1, fill, default");
 		
 		JButton btnHistogramaTemaReferencia = new JButton("Histograma Tema Referencia");
+		btnHistogramaTemaReferencia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ej2HistogramaReferencia();
+			}
+		});
 		btnHistogramaTemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(btnHistogramaTemaReferencia, "2, 10, 3, 1");
 		
@@ -541,7 +546,6 @@ public class main {
 		//frmMeatAnalyzer.setIconImage(Toolkit.getDefaultToolkit().getImage("icono.png"));
 		
 	}
-	
 	
 	//Método que te devuelve el track para la canción pasada por parámetro.
 	protected int getTrack(String name){
@@ -719,11 +723,30 @@ public class main {
 		ej2DesvioMas.setText(df.format(DesvioMas));
 		ej2DesvioMenos.setText(df.format(DesvioMenos));
 		
+	
+	}
+	
+	
+	
+	protected void ej2HistogramaReferencia() {
+	
+		//Tema de Referencia
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaReferencia.getSelectedItem(),this.getTrack(ej2TemaReferencia.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			trackReferencia = track;
+		} catch (Exception e) {}
+
+				
 		Image histograma = Histograma.getInstance().crearPanel(800,300);
 		ej2Histograma.setIcon(new ImageIcon(histograma));
 		
+		
 	}
-	
 
 	protected void pausa() {
 		// Método que para la canción que se está reproduciendo.
