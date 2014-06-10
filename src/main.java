@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
 
+import algoritmos.Huffman;
 import algoritmos.function;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -528,7 +529,8 @@ public class main {
 		JPanel pan3 = new JPanel();
 		pan3.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 3", null, pan3, null);
-	
+		pan3.setLayout(new BorderLayout(0, 0));
+			
 		JPanel pan4 = new JPanel();
 		pan4.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 4", null, pan4, null);
@@ -546,7 +548,7 @@ public class main {
 		//frmMeatAnalyzer.setIconImage(Toolkit.getDefaultToolkit().getImage("icono.png"));
 		
 	}
-	
+
 	//Método que te devuelve el track para la canción pasada por parámetro.
 	protected int getTrack(String name){
 		if (name.equals("Game Of Thrones.mid")){
@@ -598,6 +600,7 @@ public class main {
 	}
 	
 	protected void ej1Procesar() {
+		System.out.println("HOLAAAAAAAAAAAAAAAA 1");
 		//Método que compara y obtiene los temas con mayor similitud al tema referencia.
 		
 		//Modelo utilizado para mostrar los resultados finales
@@ -662,6 +665,15 @@ public class main {
 		//Actualizo campos de demás ejercicios
 		ej2TemaMasParecido.select(valoresSimilitud.elementAt(0).getFirst());
 		ej2TemaMenosParecido.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
+		
+		System.out.println("HOLAAAAAAAAAAAAAAAA");
+		Huffman h = Huffman.getInstance();
+		try {
+			h.getCodificacion(get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),this.getTrack(ej1TemaReferencia.getSelectedItem()))));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	protected void ej2Procesar(){
@@ -722,7 +734,6 @@ public class main {
 		ej2DesvioRef.setText(df.format(DesvioReferencia));
 		ej2DesvioMas.setText(df.format(DesvioMas));
 		ej2DesvioMenos.setText(df.format(DesvioMenos));
-		
 	
 	}
 	

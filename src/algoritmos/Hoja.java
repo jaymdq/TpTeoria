@@ -1,13 +1,21 @@
 package algoritmos;
 
+import java.util.BitSet;
+import java.util.HashMap;
+
 public class Hoja extends ArbolAbs {
 
-	@SuppressWarnings("unused")
-	private String simbolos = null;
+	private Integer simbolo = null;
 	
-	public Hoja(String simbolos,Double peso){
+	public Hoja(Integer simbolo,Double peso){
 		this.peso = peso;
-		this.simbolos = simbolos;
+		this.simbolo = simbolo;
 	}
 	
+	public HashMap<Integer,String> getCode() {
+		HashMap<Integer,String> h = new HashMap<Integer,String>();
+		h.put(simbolo,"");
+		return h;
+	}
+ 
 }
