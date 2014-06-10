@@ -70,10 +70,10 @@ public class Histograma {
 		 return chart;
 	 } 
 	 
-	 public Image crearPanel() {
+	 public Image crearPanel(int ancho, int largo) {
 		 JFreeChart chart = crearChart(crearDataset());
 		 
-		 return  chart.createBufferedImage(200, 200);
+		 return  chart.createBufferedImage(ancho, largo);
 	 }
 	 
 	 

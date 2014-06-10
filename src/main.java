@@ -514,7 +514,7 @@ public class main {
 		pan2.add(btnHistogramaTemaMenos, "2, 14, 3, 1");
 		
 		ej2Histograma = new JLabel("");
-		pan2.add(ej2Histograma, "2, 16, 13, 1");
+		pan2.add(ej2Histograma, "2, 16, 13, 1, center, default");
 		
 		for ( int i = 0 ; i < list.getModel().getSize();i++){
 			ej2TemaMenosParecido.add(list.getModel().getElementAt(i));
@@ -719,8 +719,8 @@ public class main {
 		ej2DesvioMas.setText(df.format(DesvioMas));
 		ej2DesvioMenos.setText(df.format(DesvioMenos));
 		
-		Image h = Histograma.getInstance().crearPanel();
-		ej2Histograma.setIcon(new ImageIcon(h));
+		Image histograma = Histograma.getInstance().crearPanel(800,300);
+		ej2Histograma.setIcon(new ImageIcon(histograma));
 		
 	}
 	
