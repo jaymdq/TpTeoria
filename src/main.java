@@ -2,9 +2,11 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 
 import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -74,6 +76,7 @@ public class main {
 	private JLabel ej2DesvioMenos;
 	private JLabel ej2DesvioMas;
 	private JLabel ej2DesvioRef;
+	private JLabel ej2Histograma;
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -392,6 +395,8 @@ public class main {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblTemaReferencia = new JLabel("Tema Referencia");
@@ -507,6 +512,9 @@ public class main {
 		JButton btnHistogramaTemaMenos = new JButton("Histograma Tema Menos Parecido");
 		btnHistogramaTemaMenos.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(btnHistogramaTemaMenos, "2, 14, 3, 1");
+		
+		ej2Histograma = new JLabel("");
+		pan2.add(ej2Histograma, "2, 16, 13, 1");
 		
 		for ( int i = 0 ; i < list.getModel().getSize();i++){
 			ej2TemaMenosParecido.add(list.getModel().getElementAt(i));
@@ -711,9 +719,8 @@ public class main {
 		ej2DesvioMas.setText(df.format(DesvioMas));
 		ej2DesvioMenos.setText(df.format(DesvioMenos));
 		
-		
-		
-		
+		Image h = Histograma.getInstance().crearPanel();
+		ej2Histograma.setIcon(new ImageIcon(h));
 		
 	}
 	
