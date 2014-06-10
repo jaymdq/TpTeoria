@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
 
-import algoritmos.Huffman;
 import algoritmos.function;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -512,12 +511,31 @@ public class main {
 		pan2.add(btnHistogramaTemaReferencia, "2, 10, 3, 1");
 		
 		JButton btnHistogramaTemaMs = new JButton("Histograma Tema M\u00E1s Parecido");
+		btnHistogramaTemaMs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ej2HistogramaMas();
+			}
+		});
+		
+		JLabel lblNewLabel_6 = new JLabel("New label");
+		pan2.add(lblNewLabel_6, "6, 10, 9, 1");
 		btnHistogramaTemaMs.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(btnHistogramaTemaMs, "2, 12, 3, 1");
 		
 		JButton btnHistogramaTemaMenos = new JButton("Histograma Tema Menos Parecido");
+		btnHistogramaTemaMenos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ej2HistogramaMenos();
+			}
+		});
+		
+		JLabel lblNewLabel_7 = new JLabel("New label");
+		pan2.add(lblNewLabel_7, "6, 12, 9, 1");
 		btnHistogramaTemaMenos.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(btnHistogramaTemaMenos, "2, 14, 3, 1");
+		
+		JLabel lblNewLabel_8 = new JLabel("New label");
+		pan2.add(lblNewLabel_8, "6, 14, 9, 1");
 		
 		ej2Histograma = new JLabel("");
 		pan2.add(ej2Histograma, "2, 16, 13, 1, center, default");
@@ -529,8 +547,7 @@ public class main {
 		JPanel pan3 = new JPanel();
 		pan3.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 3", null, pan3, null);
-		pan3.setLayout(new BorderLayout(0, 0));
-			
+	
 		JPanel pan4 = new JPanel();
 		pan4.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 4", null, pan4, null);
@@ -548,7 +565,7 @@ public class main {
 		//frmMeatAnalyzer.setIconImage(Toolkit.getDefaultToolkit().getImage("icono.png"));
 		
 	}
-
+	
 	//Método que te devuelve el track para la canción pasada por parámetro.
 	protected int getTrack(String name){
 		if (name.equals("Game Of Thrones.mid")){
@@ -724,13 +741,14 @@ public class main {
 		ej2DesvioRef.setText(df.format(DesvioReferencia));
 		ej2DesvioMas.setText(df.format(DesvioMas));
 		ej2DesvioMenos.setText(df.format(DesvioMenos));
+		
 	
 	}
 	
-	
-	
 	protected void ej2HistogramaReferencia() {
-	
+		
+		Vector<Integer> trackReferencia = null;
+		
 		//Tema de Referencia
 		try {
 			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaReferencia.getSelectedItem(),this.getTrack(ej2TemaReferencia.getSelectedItem())));
@@ -743,10 +761,48 @@ public class main {
 		} catch (Exception e) {}
 
 				
-		Image histograma = Histograma.getInstance().crearPanel(800,300);
-		ej2Histograma.setIcon(new ImageIcon(histograma));
+		Image histograma = Histograma.getInstance().crearHistograma(800,300,trackReferencia,"Histograma Tema Referencia");
+		ej2Histograma.setIcon(new ImageIcon(histograma));		
+	}
+	
+	protected void ej2HistogramaMas() {
 		
+		Vector<Integer> trackMasParecido = null;
 		
+		//Tema Mas Parecido
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMasParecido.getSelectedItem(),this.getTrack(ej2TemaMasParecido.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			trackMasParecido = track;
+		} catch (Exception e) {}
+
+
+		Image histograma = Histograma.getInstance().crearHistograma(800,300,trackMasParecido,"Histograma Tema Más Parecido");
+		ej2Histograma.setIcon(new ImageIcon(histograma));		
+	}
+
+	protected void ej2HistogramaMenos() {
+
+		Vector<Integer> trackMenosParecido = null;
+
+		//Tema Mas Parecido
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMenosParecido.getSelectedItem(),this.getTrack(ej2TemaMenosParecido.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+			trackMenosParecido = track;
+		} catch (Exception e) {}
+
+
+		Image histograma = Histograma.getInstance().crearHistograma(800,300,trackMenosParecido,"Histograma Tema Menos Parecido");
+		ej2Histograma.setIcon(new ImageIcon(histograma));		
 	}
 
 	protected void pausa() {
