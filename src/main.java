@@ -600,7 +600,6 @@ public class main {
 	}
 	
 	protected void ej1Procesar() {
-		System.out.println("HOLAAAAAAAAAAAAAAAA 1");
 		//Método que compara y obtiene los temas con mayor similitud al tema referencia.
 		
 		//Modelo utilizado para mostrar los resultados finales
@@ -665,15 +664,6 @@ public class main {
 		//Actualizo campos de demás ejercicios
 		ej2TemaMasParecido.select(valoresSimilitud.elementAt(0).getFirst());
 		ej2TemaMenosParecido.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
-		
-		System.out.println("HOLAAAAAAAAAAAAAAAA");
-		Huffman h = Huffman.getInstance();
-		try {
-			h.getCodificacion(get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),this.getTrack(ej1TemaReferencia.getSelectedItem()))));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	protected void ej2Procesar(){
