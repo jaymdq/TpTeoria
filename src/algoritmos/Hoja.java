@@ -1,6 +1,5 @@
 package algoritmos;
 
-import java.util.BitSet;
 import java.util.HashMap;
 
 public class Hoja extends ArbolAbs {

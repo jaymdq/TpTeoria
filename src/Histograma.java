@@ -1,10 +1,12 @@
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.Vector;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+
 import algoritmos.function;
 
 
@@ -26,12 +28,10 @@ public class Histograma {
 	 private static DefaultCategoryDataset crearDataset(Vector<Integer> track) {
 		 DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		 HashMap<Integer,Integer> a = function.Frecuencia(track);
+		 HashMap<Integer, Double> a = function.Probabilidades(track);
 		 
-		 double vector[] = new double[track.size()];
 		 for (Integer i : a.keySet() ){	 
-			 vector[i] = track.elementAt(i);
-			 dataset.addValue((double) a.get(i) / track.size(), "Notas", i);
+			 dataset.addValue((double) a.get(i), "Notas", i);
 		 }
 		 
 		 return dataset;

@@ -7,13 +7,18 @@ import java.awt.Image;
 import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 import java.awt.BorderLayout;
 
+import algoritmos.Huffman;
 import algoritmos.function;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -56,6 +61,9 @@ import java.awt.FlowLayout;
 
 import com.jgoodies.forms.layout.Sizes;
 
+import java.awt.TextArea;
+import java.awt.Button;
+
 
 public class main {
 
@@ -77,6 +85,12 @@ public class main {
 	private JLabel ej2DesvioMas;
 	private JLabel ej2DesvioRef;
 	private JLabel ej2Histograma;
+	private JLabel ej2DistRef;
+	private JLabel ej2DistMenos;
+	private JLabel ej2DistMas;
+	private Choice ej3Tema;
+	private JLabel ej3Codificacion;
+	private JTextArea ej3TemaCodificado;
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -517,8 +531,9 @@ public class main {
 			}
 		});
 		
-		JLabel lblNewLabel_6 = new JLabel("New label");
-		pan2.add(lblNewLabel_6, "6, 10, 9, 1");
+		ej2DistRef = new JLabel("");
+		ej2DistRef.setFont(new Font("Verdana", Font.BOLD, 14));
+		pan2.add(ej2DistRef, "6, 10, 9, 1");
 		btnHistogramaTemaMs.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(btnHistogramaTemaMs, "2, 12, 3, 1");
 		
@@ -529,13 +544,15 @@ public class main {
 			}
 		});
 		
-		JLabel lblNewLabel_7 = new JLabel("New label");
-		pan2.add(lblNewLabel_7, "6, 12, 9, 1");
+		ej2DistMas = new JLabel("");
+		ej2DistMas.setFont(new Font("Verdana", Font.BOLD, 14));
+		pan2.add(ej2DistMas, "6, 12, 9, 1");
 		btnHistogramaTemaMenos.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan2.add(btnHistogramaTemaMenos, "2, 14, 3, 1");
 		
-		JLabel lblNewLabel_8 = new JLabel("New label");
-		pan2.add(lblNewLabel_8, "6, 14, 9, 1");
+		ej2DistMenos = new JLabel("");
+		ej2DistMenos.setFont(new Font("Verdana", Font.BOLD, 14));
+		pan2.add(ej2DistMenos, "6, 14, 9, 1");
 		
 		ej2Histograma = new JLabel("");
 		pan2.add(ej2Histograma, "2, 16, 13, 1, center, default");
@@ -547,6 +564,88 @@ public class main {
 		JPanel pan3 = new JPanel();
 		pan3.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 3", null, pan3, null);
+		pan3.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("default:grow"),
+				FormFactory.RELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		JLabel lblNewLabel_6 = new JLabel("Tema a codificar (Huffman S-E) :");
+		lblNewLabel_6.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(lblNewLabel_6, "2, 2");
+		
+		ej3Tema = new Choice();
+		ej3Tema.setForeground(new Color(0, 204, 0));
+		ej3Tema.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(ej3Tema, "4, 2");
+		for ( int i = 0 ; i < list.getModel().getSize();i++){
+			ej3Tema.add(list.getModel().getElementAt(i));
+		}
+		ej3Tema.select(1);
+		
+		JButton btnProcesar_1 = new JButton("Procesar");
+		btnProcesar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ej3Procesar();
+			}
+		});
+		btnProcesar_1.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(btnProcesar_1, "6, 2");
+		
+		JLabel lblNewLabel_7 = new JLabel("Codificaci\u00F3n Obtenida :");
+		lblNewLabel_7.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(lblNewLabel_7, "2, 4");
+		
+		ej3Codificacion = new JLabel("");
+		ej3Codificacion.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(ej3Codificacion, "4, 4, 4, 1, fill, default");
+		
+		JSeparator separator_4 = new JSeparator();
+		separator_4.setForeground(new Color(0, 0, 0));
+		pan3.add(separator_4, "1, 6, 7, 1");
+		
+		JLabel lblNewLabel_8 = new JLabel("Tema Codificado : ");
+		lblNewLabel_8.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(lblNewLabel_8, "2, 8");
+		
+		ej3TemaCodificado = new JTextArea();
+		ej3TemaCodificado.setBackground(Color.WHITE);
+		ej3TemaCodificado.setFont(new Font("Verdana", Font.BOLD, 16));
+		ej3TemaCodificado.setEditable(false);
+		ej3TemaCodificado.setLineWrap(true);
+		pan3.add(ej3TemaCodificado, "2, 10, 6, 1");
+		
+		JSeparator separator_5 = new JSeparator();
+		separator_5.setForeground(Color.BLACK);
+		pan3.add(separator_5, "1, 12, 7, 1");
+		
+		JButton btnDecodificar = new JButton("Decodificar");
+		btnDecodificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ej3Decodificar();
+			}
+		});
+		btnDecodificar.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(btnDecodificar, "2, 14");
 	
 		JPanel pan4 = new JPanel();
 		pan4.setBackground(new Color(255, 255, 255));
@@ -607,7 +706,6 @@ public class main {
 		return valores;
 	}
 	
-	
 	protected Vector<Integer> get250(Vector<Integer> entrada){
 		Vector<Integer> salida = new Vector<Integer>();
 		for (int i = 0 ; i < 250 ; i++){
@@ -637,7 +735,6 @@ public class main {
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
 			trackReferencia = track;
 		} catch (Exception e) {}
 		
@@ -681,6 +778,7 @@ public class main {
 		//Actualizo campos de demás ejercicios
 		ej2TemaMasParecido.select(valoresSimilitud.elementAt(0).getFirst());
 		ej2TemaMenosParecido.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
+		
 	}
 	
 	protected void ej2Procesar(){
@@ -699,7 +797,6 @@ public class main {
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
 			trackReferencia = track;
 		} catch (Exception e) {}
 		
@@ -710,7 +807,7 @@ public class main {
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
+		
 			trackMas = track;
 		} catch (Exception e) {}
 		
@@ -721,7 +818,6 @@ public class main {
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
 			trackMenos = track;
 		} catch (Exception e) {}
 
@@ -742,7 +838,13 @@ public class main {
 		ej2DesvioMas.setText(df.format(DesvioMas));
 		ej2DesvioMenos.setText(df.format(DesvioMenos));
 		
-	
+		
+		//Mostramos las distribuciones
+		ej2DistRef.setText(function.Probabilidades(trackReferencia).toString());
+		ej2DistMas.setText(function.Probabilidades(trackMas).toString());
+		ej2DistMenos.setText(function.Probabilidades(trackMenos).toString());
+		
+		ej2HistogramaReferencia();
 	}
 	
 	protected void ej2HistogramaReferencia() {
@@ -756,7 +858,6 @@ public class main {
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
 			trackReferencia = track;
 		} catch (Exception e) {}
 
@@ -776,7 +877,6 @@ public class main {
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
 			trackMasParecido = track;
 		} catch (Exception e) {}
 
@@ -796,7 +896,6 @@ public class main {
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
 			}
-			//songs.put(ej1TemaReferencia.getSelectedItem(), track);
 			trackMenosParecido = track;
 		} catch (Exception e) {}
 
@@ -805,6 +904,48 @@ public class main {
 		ej2Histograma.setIcon(new ImageIcon(histograma));		
 	}
 
+	protected void ej3Procesar(){
+		Vector<Integer> trackACodificar = null;
+
+		//Tema de Referencia
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej3Tema.getSelectedItem(),this.getTrack(ej3Tema.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+
+			trackACodificar = track;
+		} catch (Exception e) {}
+
+		ej3Codificacion.setText(Huffman.getInstance().getCodificacion(trackACodificar).toString());
+
+		ej3TemaCodificado.setText(Huffman.getInstance().codificar(trackACodificar));
+
+		
+		final JFileChooser fc = new JFileChooser();
+		fc.setFileFilter(new FiltroHff());
+		int returnVal = fc.showSaveDialog(frmTpTeora);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            Huffman.getInstance().codificarAArchivo(trackACodificar,file.getPath());
+            
+        }
+		
+	}
+	
+	protected void ej3Decodificar(){
+		
+		final JFileChooser fc = new JFileChooser();
+		fc.setFileFilter(new FiltroHff());
+		int returnVal = fc.showOpenDialog(frmTpTeora);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			Huffman.getInstance().decodificar(file.getPath());
+
+		}
+	}
+	
 	protected void pausa() {
 		// Método que para la canción que se está reproduciendo.
 		MidiPlayer.getInstance().pause();
