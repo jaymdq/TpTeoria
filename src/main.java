@@ -18,7 +18,10 @@ import javax.swing.ScrollPaneConstants;
 
 import java.awt.BorderLayout;
 
+import algoritmos.Canal;
+import algoritmos.Equivocacion;
 import algoritmos.Huffman;
+import algoritmos.ModeloTabla;
 import algoritmos.function;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -55,6 +58,8 @@ import javax.swing.JSeparator;
 import javax.swing.AbstractListModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.JComboBox;
 
 import java.awt.FlowLayout;
@@ -63,6 +68,14 @@ import com.jgoodies.forms.layout.Sizes;
 
 import java.awt.TextArea;
 import java.awt.Button;
+
+import javax.swing.JTable;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import java.awt.TextField;
+import javax.swing.JTextField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 public class main {
@@ -91,6 +104,12 @@ public class main {
 	private Choice ej3Tema;
 	private JLabel ej3Codificacion;
 	private JTextArea ej3TemaCodificado;
+	private Choice ej5TemaReferencia;
+	private Choice ej5TemaMenos;
+	private JTable table;
+	private DefaultTableModel matrizCanal;
+	private JLabel ej5ProbabilidadEquivocacion;
+	private JSpinner ej5Tiradas;
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -99,6 +118,8 @@ public class main {
 	public static final int TRACK_TBBT = 3;
 	public static final int TRACK_TS = 3;
 	public static final int TRACK_YB = 0;
+	private JTextField ej5Error;
+	
 	
 	/**
 	 * Launch the application.
@@ -332,7 +353,6 @@ public class main {
 		ej1Resultado.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		ej1Resultado.setForeground(new Color(0, 0, 255));
 		ej1Resultado.setFont(new Font("Verdana", Font.BOLD, 16));
-		DefaultListModel<String> modeloRes1 = new DefaultListModel<String>();
 		
 		ej1Procesar = new JButton("Procesar");
 		ej1Procesar.setEnabled(false);
@@ -357,7 +377,7 @@ public class main {
 			public int getSize() {
 				return values.length;
 			}
-			public Object getElementAt(int index) {
+			public Object getElementAt(final int index) {
 				return values[index];
 			}
 		});
@@ -654,17 +674,123 @@ public class main {
 		JPanel pan5 = new JPanel();
 		pan5.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 5", null, pan5, null);
+		pan5.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("100dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("85dlu"),
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JPanel pan6 = new JPanel();
-		pan6.setBackground(new Color(255, 255, 255));
-		tabs.addTab("Ej 6", null, pan6, null);
+		JLabel lblNewLabel_9 = new JLabel("Tema Referencia");
+		lblNewLabel_9.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblNewLabel_9, "2, 2, left, default");
 		
-	
+		ej5TemaReferencia = new Choice();
+		ej5TemaReferencia.setForeground(new Color(51, 204, 0));
+		ej5TemaReferencia.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(ej5TemaReferencia, "4, 2");
+		for ( int i = 0 ; i < list.getModel().getSize();i++){
+			ej5TemaReferencia.add(list.getModel().getElementAt(i));
+		}
+		ej5TemaReferencia.select(1);
 		
+		JButton ej5Boton = new JButton("Procesar");
+		ej5Boton.setIcon(new ImageIcon(main.class.getResource("/imagenes/process.png")));
+		ej5Boton.setFont(new Font("Verdana", Font.BOLD, 16));
+		ej5Boton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ej5Procesar();
+			}
+		});
+		pan5.add(ej5Boton, "6, 2, 1, 5");
+		
+		JLabel lblTemaMenosParecido_1 = new JLabel("Tema Menos Parecido");
+		lblTemaMenosParecido_1.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblTemaMenosParecido_1, "2, 4, left, default");
+		
+		ej5TemaMenos = new Choice();
+		ej5TemaMenos.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(ej5TemaMenos, "4, 4");
+		for ( int i = 0 ; i < list.getModel().getSize();i++){
+			ej5TemaMenos.add(list.getModel().getElementAt(i));
+		}
+		
+		JLabel lblTiradasMinimas = new JLabel("Tiradas minimas : ");
+		lblTiradasMinimas.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblTiradasMinimas, "8, 4, left, default");
+		
+		ej5Tiradas = new JSpinner();
+		ej5Tiradas.setModel(new SpinnerNumberModel(100, 1, 1000, 1));
+		ej5Tiradas.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(ej5Tiradas, "10, 4");
+		
+		JLabel lblMatriz = new JLabel("Matriz Del Canal : ");
+		lblMatriz.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblMatriz, "2, 6, left, default");
+		
+		matrizCanal = new ModeloTabla();
+		
+		JLabel lblError = new JLabel("Error");
+		lblError.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblError, "8, 6, left, default");
+		
+		ej5Error = new JTextField();
+		ej5Error.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char caracter = e.getKeyChar();
+
+				// Verificar si la tecla pulsada no es un digito
+				if (((caracter < '0') || (caracter > '9')) && (caracter != '\b' /*corresponde a BACK_SPACE*/) && (caracter != '.' ) )
+				{
+					e.consume();  // ignorar el evento de teclado
+				}
+			}
+		});
+		ej5Error.setText("0.1");
+		ej5Error.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(ej5Error, "10, 6");
+		ej5Error.setColumns(10);
+		table = new JTable();
+		table.setFont(new Font("Verdana", Font.BOLD, 16));
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane scroll=new JScrollPane(table);
+		scroll.setViewportView(table);
+		pan5.add(scroll, "2, 8, 5, 1, default, top");
+		
+		JLabel lblNewLabel_10 = new JLabel("<html>Probabilidad de equivocaci\u00F3n : </html>");
+		lblNewLabel_10.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblNewLabel_10, "8, 8, left, top");
+		
+		ej5ProbabilidadEquivocacion = new JLabel("");
+		ej5ProbabilidadEquivocacion.setForeground(Color.RED);
+		ej5ProbabilidadEquivocacion.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(ej5ProbabilidadEquivocacion, "10, 8, default, top");
+		
+		JSeparator separator_6 = new JSeparator();
+		separator_6.setForeground(Color.BLACK);
+		pan5.add(separator_6, "1, 9, 10, 1");
+		
+				
 		//frmMeatAnalyzer.setIconImage(Toolkit.getDefaultToolkit().getImage("icono.png"));
 		
 	}
-	
+
 	//Método que te devuelve el track para la canción pasada por parámetro.
 	protected int getTrack(String name){
 		if (name.equals("Game Of Thrones.mid")){
@@ -778,6 +904,7 @@ public class main {
 		//Actualizo campos de demás ejercicios
 		ej2TemaMasParecido.select(valoresSimilitud.elementAt(0).getFirst());
 		ej2TemaMenosParecido.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
+		ej5TemaMenos.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
 		
 	}
 	
@@ -944,6 +1071,72 @@ public class main {
 			Huffman.getInstance().decodificar(file.getPath());
 
 		}
+	}
+	
+	
+	protected void ej5Procesar() {
+		//Tracks
+		Vector<Integer> trackReferencia = null;
+		Vector<Integer> trackMenos = null;
+		
+		//Tema de Referencia
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej5TemaReferencia.getSelectedItem(),this.getTrack(ej5TemaReferencia.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			trackReferencia = track;
+		} catch (Exception e) {}
+
+		//Tema Menos Parecido
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej5TemaMenos.getSelectedItem(),this.getTrack(ej5TemaMenos.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+			trackMenos = track;
+		} catch (Exception e) {}
+
+		//a)
+		Canal c = new Canal(trackReferencia,trackMenos);
+		double[][] mat = c.getMatrizcanal();
+		Vector<Integer> headerCol = c.getSimbolosEntrada();
+		Vector<Integer> headerFilas = c.getSimbolosSalida();
+		
+		//Creamos la JTable
+		Object nombreCols[]=new Object[headerCol.size()+1];
+		nombreCols[0]="";
+		for(int i = 1; i < headerCol.size() +1 ; i++){
+			nombreCols[i]=headerCol.elementAt(i-1);
+		}
+		matrizCanal.setColumnIdentifiers(nombreCols);
+		matrizCanal.setRowCount(headerFilas.size());
+		for (int i = 0 ; i < headerFilas.size(); i++){
+			matrizCanal.setValueAt(headerFilas.elementAt(i), i, 0);	
+		}
+		table.setModel(matrizCanal);
+		table.setDragEnabled(false);
+		TableColumn tcol = table.getColumn("");
+		tcol.setPreferredWidth(40);
+		tcol.setMinWidth(20);
+		tcol.setMaxWidth(40);
+		table.getColumnModel().getColumn(0).setCellRenderer(table.getTableHeader().getDefaultRenderer());		
+		DecimalFormat df = new DecimalFormat("0.0000");
+		//Metemos datos
+		for (int i = 0; i < headerCol.size();i++){
+			for (int j = 0; j < headerFilas.size();j++){				
+				matrizCanal.setValueAt(df.format(mat[j][i]),j, i+1);
+			}
+		}
+				
+		//b)
+		Double error = Double.parseDouble(ej5Error.getText());
+		Equivocacion e = new Equivocacion(error);
+		double d = e.simular(c,(Integer)ej5Tiradas.getValue());
+		ej5ProbabilidadEquivocacion.setText(df.format(d));
+		
 	}
 	
 	protected void pausa() {
