@@ -119,6 +119,9 @@ public class main {
 	public static final int TRACK_TS = 3;
 	public static final int TRACK_YB = 0;
 	private JTextField ej5Error;
+	private Choice ej4TemaMas;
+	private JLabel ej4Orden2;
+	private JLabel ej4Orden1;
 	
 	
 	/**
@@ -670,6 +673,66 @@ public class main {
 		JPanel pan4 = new JPanel();
 		pan4.setBackground(new Color(255, 255, 255));
 		tabs.addTab("Ej 4", null, pan4, null);
+		pan4.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(50dlu;default)"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		JLabel lblNewLabel_11 = new JLabel("Tema M\u00E1s Parecido");
+		lblNewLabel_11.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(lblNewLabel_11, "2, 2, left, top");
+		
+		ej4TemaMas = new Choice();
+		ej4TemaMas.setFont(new Font("Verdana", Font.BOLD, 16));
+		for ( int i = 0 ; i < list.getModel().getSize();i++){
+			ej4TemaMas.add(list.getModel().getElementAt(i));
+		}
+		
+		pan4.add(ej4TemaMas, "4, 2, default, top");
+		
+		JButton btnProcesar_2 = new JButton("Procesar");
+		btnProcesar_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ej4Procesar();
+			}
+		});
+		btnProcesar_2.setIcon(new ImageIcon(main.class.getResource("/imagenes/process.png")));
+		btnProcesar_2.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(btnProcesar_2, "6, 2, left, default");
+		
+		JLabel lblCodificacinHuffmanorden = new JLabel("Codificaci\u00F3n Huffman (Orden 1) : ");
+		lblCodificacinHuffmanorden.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(lblCodificacinHuffmanorden, "2, 4");
+		
+		ej4Orden1 = new JLabel("");
+		ej4Orden1.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(ej4Orden1, "4, 4, 3, 1, fill, default");
+		
+		JLabel lblCodificacinHuffmanorden_1 = new JLabel("Codificaci\u00F3n Huffman (Orden 2) : ");
+		lblCodificacinHuffmanorden_1.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(lblCodificacinHuffmanorden_1, "2, 6");
+		
+		ej4Orden2 = new JLabel("");
+		ej4Orden2.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(ej4Orden2, "4, 6, 3, 1");
+		
+		JSeparator separator_7 = new JSeparator();
+		separator_7.setForeground(Color.BLACK);
+		pan4.add(separator_7, "1, 8, 6, 1");
 		
 		JPanel pan5 = new JPanel();
 		pan5.setBackground(new Color(255, 255, 255));
@@ -882,7 +945,7 @@ public class main {
 		for (String clave : songs.keySet()){
 			Vector<Integer> trackSeleccionado = songs.get(clave);
 			double res = function.CoeficienteDeCorrelacion(trackReferencia, trackSeleccionado);
-			insOrdenado(clave,res,valores);
+			insOrdenado(clave,Math.abs(res),valores);
 			insOrdenado(clave,Math.abs(res),valoresSimilitud);
 		}
 
@@ -903,6 +966,7 @@ public class main {
 		
 		//Actualizo campos de demás ejercicios
 		ej2TemaMasParecido.select(valoresSimilitud.elementAt(0).getFirst());
+		ej4TemaMas.select(valoresSimilitud.elementAt(0).getFirst());
 		ej2TemaMenosParecido.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
 		ej5TemaMenos.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
 		
@@ -1073,7 +1137,26 @@ public class main {
 		}
 	}
 	
-	
+	protected void ej4Procesar() {
+		Vector<Integer> trackACodificar = null;
+
+		//Tema de Referencia
+		try {
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej4TemaMas.getSelectedItem(),this.getTrack(ej4TemaMas.getSelectedItem())));
+			for ( int i = 0 ; i < track.size() ; i++){
+				int h = track.elementAt(i) / 10;
+				track.set(i, h);
+			}
+
+			trackACodificar = track;
+		} catch (Exception e) {}
+		
+		
+		//Aca usar la fuente Markoviana
+		//ej4Orden1.setText(Huffman.getInstance().getCodificacion(trackACodificar).toString());
+		
+	}
+		
 	protected void ej5Procesar() {
 		//Tracks
 		Vector<Integer> trackReferencia = null;

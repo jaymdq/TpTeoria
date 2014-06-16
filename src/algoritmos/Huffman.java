@@ -24,7 +24,7 @@ public class Huffman {
 		return instancia;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public HashMap<Integer, String> getCodificacion (Vector<Integer> valores) {
 		HashMap<Integer,Double> probs = function.Probabilidades(valores);
 		Vector<ArbolAbs> nodos = new Vector<ArbolAbs>();
@@ -43,6 +43,29 @@ public class Huffman {
 		}		
 		return nodos.elementAt(0).getCode();
 	}
+	
+	public HashMap<Integer, String> getCodificacionMarkoviana (Vector<Integer> valores, int orden) {
+		
+		//Redefinir esto 
+		HashMap<Integer,Double> probs = function.Probabilidades(valores);
+		Vector<ArbolAbs> nodos = new Vector<ArbolAbs>();
+		for (int v: probs.keySet()) {
+			Hoja h = new Hoja(v,probs.get(v));
+			nodos.add(h);
+		}
+		while (nodos.size() > 1) {
+			Collections.sort(nodos);
+			ArbolAbs arbizq = nodos.elementAt(0);
+			ArbolAbs arbder = nodos.elementAt(1);
+			Arbol a = new Arbol(arbizq,arbder);
+			nodos.removeElementAt(0);
+			nodos.removeElementAt(0);
+			nodos.add(a);
+		}		
+		return nodos.elementAt(0).getCode();
+	}
+	
+	
 	
 	public String codificar(Vector<Integer> valores){
 		HashMap<Integer,String> codigo = getCodificacion(valores);
