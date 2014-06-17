@@ -1,5 +1,4 @@
 
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
@@ -8,8 +7,6 @@ import java.awt.Toolkit;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -37,6 +34,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Vector;
@@ -134,6 +132,7 @@ public class main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					System.setErr(new PrintStream(new File("errores.txt")));
 					main window = new main();
 					window.frmTpTeora.setVisible(true);
 				} catch (Exception e) {
@@ -211,7 +210,7 @@ public class main {
 		DefaultListModel<String> modelo = new DefaultListModel<String>();
 
 		//obtener canciones
-		File dir = new File("src/midis/");
+		File dir = new File("midis/");
 		String[] ficheros = dir.list();
 		for (int i=0; i < ficheros.length ; i++)
 			for (int j=i+1; j < ficheros.length - 1 ; j++)
@@ -235,7 +234,7 @@ public class main {
 		list.setSelectedIndex(0);
 
 		JButton btnParar = new JButton("");
-		btnParar.setIcon(new ImageIcon("src/imagenes/stop.png"));
+		btnParar.setIcon(new ImageIcon("imagenes/stop.png"));
 		btnParar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				pausa();
@@ -243,7 +242,7 @@ public class main {
 		});
 
 		JButton playButton = new JButton("");
-		playButton.setIcon(new ImageIcon("src/imagenes/play.png"));
+		playButton.setIcon(new ImageIcon("imagenes/play.png"));
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				play();
@@ -999,7 +998,7 @@ public class main {
 
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej1TemaReferencia.getSelectedItem(),this.getTrack(ej1TemaReferencia.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej1TemaReferencia.getSelectedItem(),this.getTrack(ej1TemaReferencia.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1011,7 +1010,7 @@ public class main {
 		//Temas a Comparar
 		for(String cancion : ej1TemasComparar.getSelectedValuesList()){
 			try {
-				Vector<Integer> track = get250(ReadMIDI.getInstance().getNotes("src/midis/" + cancion,this.getTrack(cancion)));
+				Vector<Integer> track = get250(ReadMIDI.getInstance().getNotes("midis/" + cancion,this.getTrack(cancion)));
 				for ( int i = 0 ; i < track.size() ; i++){
 					int h = track.elementAt(i) / 10;
 					track.set(i, h);
@@ -1063,7 +1062,7 @@ public class main {
 
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaReferencia.getSelectedItem(),this.getTrack(ej2TemaReferencia.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej2TemaReferencia.getSelectedItem(),this.getTrack(ej2TemaReferencia.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1073,7 +1072,7 @@ public class main {
 
 		//Tema Mas Parecido
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMasParecido.getSelectedItem(),this.getTrack(ej2TemaMasParecido.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej2TemaMasParecido.getSelectedItem(),this.getTrack(ej2TemaMasParecido.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1084,7 +1083,7 @@ public class main {
 
 		//Tema Menos Parecido
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMenosParecido.getSelectedItem(),this.getTrack(ej2TemaMenosParecido.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej2TemaMenosParecido.getSelectedItem(),this.getTrack(ej2TemaMenosParecido.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1124,7 +1123,7 @@ public class main {
 
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaReferencia.getSelectedItem(),this.getTrack(ej2TemaReferencia.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej2TemaReferencia.getSelectedItem(),this.getTrack(ej2TemaReferencia.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1143,7 +1142,7 @@ public class main {
 
 		//Tema Mas Parecido
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMasParecido.getSelectedItem(),this.getTrack(ej2TemaMasParecido.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej2TemaMasParecido.getSelectedItem(),this.getTrack(ej2TemaMasParecido.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1162,7 +1161,7 @@ public class main {
 
 		//Tema Mas Parecido
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej2TemaMenosParecido.getSelectedItem(),this.getTrack(ej2TemaMenosParecido.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej2TemaMenosParecido.getSelectedItem(),this.getTrack(ej2TemaMenosParecido.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1180,7 +1179,7 @@ public class main {
 
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej3Tema.getSelectedItem(),this.getTrack(ej3Tema.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej3Tema.getSelectedItem(),this.getTrack(ej3Tema.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1222,7 +1221,7 @@ public class main {
 
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej4TemaMas.getSelectedItem(),this.getTrack(ej4TemaMas.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej4TemaMas.getSelectedItem(),this.getTrack(ej4TemaMas.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1269,7 +1268,7 @@ public class main {
 
 		//Tema de Referencia
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej5TemaReferencia.getSelectedItem(),this.getTrack(ej5TemaReferencia.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej5TemaReferencia.getSelectedItem(),this.getTrack(ej5TemaReferencia.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1279,7 +1278,7 @@ public class main {
 
 		//Tema Menos Parecido
 		try {
-			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("src/midis/" + ej5TemaMenos.getSelectedItem(),this.getTrack(ej5TemaMenos.getSelectedItem())));
+			Vector<Integer> track= get250(ReadMIDI.getInstance().getNotes("midis/" + ej5TemaMenos.getSelectedItem(),this.getTrack(ej5TemaMenos.getSelectedItem())));
 			for ( int i = 0 ; i < track.size() ; i++){
 				int h = track.elementAt(i) / 10;
 				track.set(i, h);
@@ -1341,7 +1340,7 @@ public class main {
 	protected void play() {
 		// Método que reproduce la canción seleccionada.
 
-		MidiPlayer.getInstance().play("src/midis/"+list.getSelectedValue());
+		MidiPlayer.getInstance().play("midis/"+list.getSelectedValue());
 	}
 
 }

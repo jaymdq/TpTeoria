@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
@@ -364,7 +363,6 @@ public class Huffman {
 	
 	
 	public Double getTasa(Vector<Integer> entrada,HashMap<Integer,String> orden1, HashMap<Integer,String> orden2){
-		Double salida = 0.0;
 		
 		Vector<String> cod1 = generarCodificacion(entrada,orden1);
 		Vector<String> cod2 = generarCodificacion(juntar(entrada),orden2);

@@ -1,6 +1,5 @@
 package algoritmos;
 
-import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
