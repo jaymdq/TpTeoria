@@ -183,6 +183,42 @@ public class Huffman {
 		tamUltChar = cant_digitos;
 		return salida;
 	}
+	
+	private Vector<String> generarCodificacion (Vector<Integer> valores,HashMap<Integer,String> codigo){
+		Vector<String> salida = new Vector<String>();
+	
+		//Buffer
+		char buffer = 0;
+		int cant_digitos = 0;
+
+		for (Integer nota : valores){
+			String cod = codigo.get(nota);
+			int longitud = cod.length();
+			while ( longitud > 0){
+				buffer = (char) (buffer << 1);
+				if ( cod.charAt(longitud-1) == '1'){
+					buffer = (char) (buffer | 1);
+				}
+				cant_digitos++;
+				if (cant_digitos == 16){
+					String aux = ""+buffer;
+					salida.add(aux);
+					buffer = 0;
+					cant_digitos = 0;
+				}
+				longitud--;
+			}
+
+		}
+		if ( (cant_digitos < 16) && ( cant_digitos !=0 ) ){
+			buffer= (char) (buffer<<(16 - cant_digitos));
+			String aux = ""+buffer;
+			salida.add(aux);
+		}
+		//Redefino la variable tamUltChar
+		tamUltChar = cant_digitos;
+		return salida;
+	}
 
 	public String decodificarCodificacion(Vector<String> recibido,int tamUltChar){
 		String salida = "";
@@ -316,4 +352,34 @@ public class Huffman {
 		return salida;
 	}
 
+
+	private Vector<Integer> juntar(Vector<Integer> entrada){
+		Vector<Integer> salida = new Vector<Integer>();
+
+		for (int i = 0 ; i < entrada.size() ; i+=2){
+			salida.add(entrada.elementAt(i) * 10 + entrada.elementAt(i+1));
+		}
+		return salida;
+	}
+	
+	
+	public Double getTasa(Vector<Integer> entrada,HashMap<Integer,String> orden1, HashMap<Integer,String> orden2){
+		Double salida = 0.0;
+		
+		Vector<String> cod1 = generarCodificacion(entrada,orden1);
+		Vector<String> cod2 = generarCodificacion(juntar(entrada),orden2);
+		
+		String c1 = "";
+		for (String s : cod1){
+			c1 += s;
+		}
+		String c2 = "";
+		for (String s : cod2){
+			c2 += s;
+		}
+		
+		return (double) c1.length() / c2.length();
+	}
+	
+	
 }

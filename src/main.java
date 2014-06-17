@@ -112,6 +112,9 @@ public class main {
 	private JTextArea ej5TemaTransmitido;
 	private JTextArea ej5TemaRecibido;
 	private JLabel ej5ErrorCuadratico;
+	private JLabel ej4Tiempo1;
+	private JLabel ej4Tiempo2;
+	private JLabel ej4Tasa;
 
 
 	//Lista de tracks fijos.
@@ -154,7 +157,7 @@ public class main {
 	private void initialize() {
 		frmTpTeora = new JFrame();
 		frmTpTeora.getContentPane().setBackground(new Color(255, 255, 153));
-		frmTpTeora.setTitle("TP Teor\u00EDa");
+		frmTpTeora.setTitle("Teoría de la Información, Trabajo Especial, Enunciado 1, 2014. Grupo N° 19.");
 		frmTpTeora.setBounds(100, 100, 450, 300);
 		frmTpTeora.setResizable(false);
 		frmTpTeora.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -163,16 +166,6 @@ public class main {
 		int alto = frmTpTeora.getToolkit().getScreenSize().height;
 		frmTpTeora.setBounds(0,0,ancho - 100, alto - 100);
 		frmTpTeora.setLocationRelativeTo(null);
-
-		JMenuBar menuBar = new JMenuBar();
-		frmTpTeora.setJMenuBar(menuBar);
-
-		JMenu mnArchivo = new JMenu("Archivo");
-		menuBar.add(mnArchivo);
-
-
-		JMenu mnAcercaDe = new JMenu("Acerca de");
-		menuBar.add(mnAcercaDe);
 		frmTpTeora.getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JPanel Barra = new JPanel();
@@ -689,9 +682,17 @@ public class main {
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
-				new RowSpec[] {
+			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("30dlu"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -744,6 +745,34 @@ public class main {
 		JSeparator separator_7 = new JSeparator();
 		separator_7.setForeground(Color.BLACK);
 		pan4.add(separator_7, "1, 8, 6, 1");
+
+		JLabel lblTiempoDeProcesamiento = new JLabel("Tiempo de Procesamiento (Orden 1) : ");
+		lblTiempoDeProcesamiento.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(lblTiempoDeProcesamiento, "2, 10");
+
+		ej4Tiempo1 = new JLabel("");
+		ej4Tiempo1.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(ej4Tiempo1, "4, 10, 3, 1, left, default");
+
+		JLabel lblTiempoDeProcesamiento_1 = new JLabel("Tiempo de Procesamiento (Orden 2) : ");
+		lblTiempoDeProcesamiento_1.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(lblTiempoDeProcesamiento_1, "2, 12");
+
+		ej4Tiempo2 = new JLabel("");
+		ej4Tiempo2.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(ej4Tiempo2, "4, 12, 3, 1, left, default");
+		
+		JSeparator separator_8 = new JSeparator();
+		separator_8.setForeground(Color.BLACK);
+		pan4.add(separator_8, "1, 14, 6, 1");
+		
+		JLabel lblTasaDeCompresin = new JLabel("Tasa de Compresión (Orden 1) : ");
+		lblTasaDeCompresin.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(lblTasaDeCompresin, "2, 16");
+		
+		ej4Tasa = new JLabel("");
+		ej4Tasa.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan4.add(ej4Tasa, "4, 16, 3, 1, left, default");
 
 		JPanel pan5 = new JPanel();
 		pan5.setBackground(new Color(255, 255, 255));
@@ -1204,9 +1233,32 @@ public class main {
 
 
 		//Aca usar la fuente Markoviana
-		ej4Orden1.setText(Huffman.getInstance().getCodificacionMarkoviana(trackACodificar,1).toString());
-		ej4Orden2.setText(Huffman.getInstance().getCodificacionMarkoviana(trackACodificar,2).toString());
 
+		long inicio = 0;
+		long intermedio = 0;
+		long finalizado = 0;
+
+		inicio= System.nanoTime();
+
+		HashMap<Integer,String> orden2 = Huffman.getInstance().getCodificacionMarkoviana(trackACodificar,2);
+
+		intermedio = System.nanoTime();
+		
+		ej4Orden2.setText(orden2.toString());
+
+		HashMap<Integer,String> orden1 = Huffman.getInstance().getCodificacionMarkoviana(trackACodificar,1);
+		
+		finalizado = System.nanoTime();
+		
+		ej4Orden1.setText(orden1.toString());
+
+		ej4Tiempo2.setText((intermedio - inicio) + " ns");
+		ej4Tiempo1.setText((finalizado - intermedio) + " ns");
+		
+
+		//Tasa de compresión
+		DecimalFormat df = new DecimalFormat("0.0000");
+		ej4Tasa.setText(df.format(Huffman.getInstance().getTasa(trackACodificar, orden1, orden2)));
 
 	}
 
