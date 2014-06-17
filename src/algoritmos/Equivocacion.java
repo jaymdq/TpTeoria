@@ -10,7 +10,7 @@ public class Equivocacion {
 	public Equivocacion(double error){
 		this.error = error;
 	}
-	
+
 	private boolean converge(double prob, double probAnt) {
 		if ( Math.abs(prob - probAnt) < error ){
 			return true;
@@ -57,8 +57,8 @@ public class Equivocacion {
 		}
 		return prob;
 	}
-	
-	
+
+
 	public Vector<Integer> transmitir(Canal c,Vector<Integer> entrada){
 		Vector<Integer> salida = new Vector<Integer>();
 
@@ -79,14 +79,14 @@ public class Equivocacion {
 
 		return salida;
 	}
-	
-	
+
+
 	public Double errorCuadraticoMedio(Vector<Integer> original, Vector<Integer> recibido){
 		Double salida = 0.0;
 		for (int i = 0 ; i < original.size(); i++){
 			salida += Math.pow((recibido.elementAt(i) - original.elementAt(i)),2);
 		}
-		
+
 		salida /= original.size();
 		return salida;
 	}
