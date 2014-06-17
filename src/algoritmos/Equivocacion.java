@@ -57,5 +57,38 @@ public class Equivocacion {
 		}
 		return prob;
 	}
+	
+	
+	public Vector<Integer> transmitir(Canal c,Vector<Integer> entrada){
+		Vector<Integer> salida = new Vector<Integer>();
+
+		for (Integer nota : entrada){
+			Vector<Integer> salidas = new Vector<Integer>();
+			Integer suma = 0;
+			for (int i = 0 ; i < 3 ; i++){
+				salidas.add(c.getSalida(nota));
+				suma += salidas.lastElement();
+			}
+			Collections.sort(salidas);
+			if (suma < 14){
+				salida.add(salidas.elementAt(0));
+			}else{
+				salida.add(salidas.elementAt(2));
+			}
+		}
+
+		return salida;
+	}
+	
+	
+	public Double errorCuadraticoMedio(Vector<Integer> original, Vector<Integer> recibido){
+		Double salida = 0.0;
+		for (int i = 0 ; i < original.size(); i++){
+			salida += Math.pow((recibido.elementAt(i) - original.elementAt(i)),2);
+		}
+		
+		salida /= original.size();
+		return salida;
+	}
 
 }

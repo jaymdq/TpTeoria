@@ -1,12 +1,10 @@
+
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 
-import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -14,7 +12,6 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
 
 import java.awt.BorderLayout;
 
@@ -60,20 +57,16 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.JComboBox;
 
 import java.awt.FlowLayout;
 
 import com.jgoodies.forms.layout.Sizes;
 
-import java.awt.TextArea;
-import java.awt.Button;
-
 import javax.swing.JTable;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import java.awt.TextField;
 import javax.swing.JTextField;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -110,6 +103,15 @@ public class main {
 	private DefaultTableModel matrizCanal;
 	private JLabel ej5ProbabilidadEquivocacion;
 	private JSpinner ej5Tiradas;
+	private JTextField ej5Error;
+	private Choice ej4TemaMas;
+	private JLabel ej4Orden2;
+	private JLabel ej4Orden1;
+	private JTextArea ej3Decodificacion;
+	private JTextArea ej5TemaTransmitido;
+	private JTextArea ej5TemaRecibido;
+	private JLabel ej5ErrorCuadratico;
+	
 	
 	//Lista de tracks fijos.
 	public static final int TRACK_DG = 0;
@@ -118,10 +120,7 @@ public class main {
 	public static final int TRACK_TBBT = 3;
 	public static final int TRACK_TS = 3;
 	public static final int TRACK_YB = 0;
-	private JTextField ej5Error;
-	private Choice ej4TemaMas;
-	private JLabel ej4Orden2;
-	private JLabel ej4Orden1;
+	
 	
 	
 	/**
@@ -150,6 +149,7 @@ public class main {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	private void initialize() {
 		frmTpTeora = new JFrame();
 		frmTpTeora.getContentPane().setBackground(new Color(255, 255, 153));
@@ -372,10 +372,6 @@ public class main {
 		ej1Procesar.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan1.add(ej1Procesar, "2, 18, default, top");
 		ej1Resultado.setModel(new AbstractListModel() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
 			String[] values = new String[] {"1.", "2.", "3.", "4.", "5.", "6."};
 			public int getSize() {
 				return values.length;
@@ -589,7 +585,7 @@ public class main {
 		tabs.addTab("Ej 3", null, pan3, null);
 		pan3.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("160dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -610,7 +606,9 @@ public class main {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(242dlu;default):grow"),}));
 		
 		JLabel lblNewLabel_6 = new JLabel("Tema a codificar (Huffman S-E) :");
 		lblNewLabel_6.setFont(new Font("Verdana", Font.BOLD, 16));
@@ -668,7 +666,17 @@ public class main {
 			}
 		});
 		btnDecodificar.setFont(new Font("Verdana", Font.BOLD, 16));
-		pan3.add(btnDecodificar, "2, 14");
+		pan3.add(btnDecodificar, "2, 14, left, default");
+		
+		JLabel lblNewLabel_12 = new JLabel("Notas leidas despu\u00E9s de decodificar : ");
+		lblNewLabel_12.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(lblNewLabel_12, "4, 14");
+		
+		ej3Decodificacion = new JTextArea();
+		ej3Decodificacion.setEditable(false);
+		ej3Decodificacion.setLineWrap(true);
+		ej3Decodificacion.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan3.add(ej3Decodificacion, "2, 16, 6, 1, default, fill");
 	
 		JPanel pan4 = new JPanel();
 		pan4.setBackground(new Color(255, 255, 255));
@@ -682,7 +690,7 @@ public class main {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(50dlu;default)"),
+				RowSpec.decode("30dlu"),
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -745,9 +753,10 @@ public class main {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("100dlu"),
+				ColumnSpec.decode("85dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("50dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -757,6 +766,16 @@ public class main {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("85dlu"),
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblNewLabel_9 = new JLabel("Tema Referencia");
@@ -798,7 +817,7 @@ public class main {
 		pan5.add(lblTiradasMinimas, "8, 4, left, default");
 		
 		ej5Tiradas = new JSpinner();
-		ej5Tiradas.setModel(new SpinnerNumberModel(100, 1, 1000, 1));
+		ej5Tiradas.setModel(new SpinnerNumberModel(100, 1, 10000, 1));
 		ej5Tiradas.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan5.add(ej5Tiradas, "10, 4");
 		
@@ -808,7 +827,7 @@ public class main {
 		
 		matrizCanal = new ModeloTabla();
 		
-		JLabel lblError = new JLabel("Error");
+		JLabel lblError = new JLabel("Error : ");
 		lblError.setFont(new Font("Verdana", Font.BOLD, 16));
 		pan5.add(lblError, "8, 6, left, default");
 		
@@ -847,14 +866,43 @@ public class main {
 		
 		JSeparator separator_6 = new JSeparator();
 		separator_6.setForeground(Color.BLACK);
-		pan5.add(separator_6, "1, 9, 10, 1");
+		pan5.add(separator_6, "1, 9, 11, 1");
+		
+		JLabel lblTemaTransmitido = new JLabel("Tema Transmitido : ");
+		lblTemaTransmitido.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblTemaTransmitido, "2, 11");
+		
+		ej5TemaTransmitido = new JTextArea();
+		ej5TemaTransmitido.setFont(new Font("Verdana", Font.PLAIN, 14));
+		ej5TemaTransmitido.setEditable(false);
+		ej5TemaTransmitido.setLineWrap(true);
+		pan5.add(ej5TemaTransmitido, "2, 13, 9, 1, fill, top");
+		
+		JLabel lblTemaRecibido = new JLabel("Tema Recibido : ");
+		lblTemaRecibido.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblTemaRecibido, "2, 15");
+		
+		ej5TemaRecibido = new JTextArea();
+		ej5TemaRecibido.setFont(new Font("Verdana", Font.PLAIN, 14));
+		ej5TemaRecibido.setLineWrap(true);
+		ej5TemaRecibido.setEditable(false);
+		pan5.add(ej5TemaRecibido, "2, 17, 9, 1, fill, top");
+		
+		JLabel lblErrorMedioCuadrtico = new JLabel("Error Medio Cuadr\u00E1tico : ");
+		lblErrorMedioCuadrtico.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(lblErrorMedioCuadrtico, "2, 19");
+		
+		ej5ErrorCuadratico = new JLabel("");
+		ej5ErrorCuadratico.setForeground(Color.RED);
+		ej5ErrorCuadratico.setFont(new Font("Verdana", Font.BOLD, 16));
+		pan5.add(ej5ErrorCuadratico, "4, 19, 3, 1");
 		
 				
 		//frmMeatAnalyzer.setIconImage(Toolkit.getDefaultToolkit().getImage("icono.png"));
 		
 	}
 
-	//MÈtodo que te devuelve el track para la canciÛn pasada por par·metro.
+	//M√©todo que te devuelve el track para la canci√≥n pasada por par√°metro.
 	protected int getTrack(String name){
 		if (name.equals("Game Of Thrones.mid")){
 			return TRACK_GOF;
@@ -904,7 +952,7 @@ public class main {
 	}
 	
 	protected void ej1Procesar() {
-		//MÈtodo que compara y obtiene los temas con mayor similitud al tema referencia.
+		//M√©todo que compara y obtiene los temas con mayor similitud al tema referencia.
 		
 		//Modelo utilizado para mostrar los resultados finales
 		DefaultListModel<String> modeloRes1 = new DefaultListModel<String>();
@@ -914,7 +962,7 @@ public class main {
 		//estructuras usadas por comparar
 		HashMap<String,Vector<Integer>> songs= new HashMap<String,Vector<Integer>>();
 		Vector<Pair<String,Double>> valores= new Vector<Pair<String,Double>>();
-		Vector<Pair<String,Double>> valoresSimilitud= new Vector<Pair<String,Double>>();
+		//Vector<Pair<String,Double>> valoresSimilitud= new Vector<Pair<String,Double>>();
 		
 		
 		//Tema de Referencia
@@ -946,7 +994,7 @@ public class main {
 			Vector<Integer> trackSeleccionado = songs.get(clave);
 			double res = function.CoeficienteDeCorrelacion(trackReferencia, trackSeleccionado);
 			insOrdenado(clave,Math.abs(res),valores);
-			insOrdenado(clave,Math.abs(res),valoresSimilitud);
+			//insOrdenado(clave,Math.abs(res),valoresSimilitud);
 		}
 
 		DecimalFormat df = new DecimalFormat("0.0000");
@@ -962,18 +1010,18 @@ public class main {
 		}
 		ej1Resultado.setModel(modeloRes1);
 		BarraDeEstado.setForeground(Color.black);
-		BarraDeEstado.setText("Tema m·s parecido : \"" + valoresSimilitud.elementAt(0).getFirst() + "\" , Tema menos parecido : \"" + valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst() + "\".");
+		BarraDeEstado.setText("Tema m√°s parecido : \"" + valores.elementAt(0).getFirst() + "\" , Tema menos parecido : \"" + valores.elementAt(valores.size() - 1 ).getFirst() + "\".");
 		
-		//Actualizo campos de dem·s ejercicios
-		ej2TemaMasParecido.select(valoresSimilitud.elementAt(0).getFirst());
-		ej4TemaMas.select(valoresSimilitud.elementAt(0).getFirst());
-		ej2TemaMenosParecido.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
-		ej5TemaMenos.select(valoresSimilitud.elementAt(valoresSimilitud.size() - 1 ).getFirst());
+		//Actualizo campos de dem√°s ejercicios
+		ej2TemaMasParecido.select(valores.elementAt(0).getFirst());
+		ej4TemaMas.select(valores.elementAt(0).getFirst());
+		ej2TemaMenosParecido.select(valores.elementAt(valores.size() - 1 ).getFirst());
+		ej5TemaMenos.select(valores.elementAt(valores.size() - 1 ).getFirst());
 		
 	}
 	
 	protected void ej2Procesar(){
-		//MÈtodo que calcula media y desvio del tema de referencia y de la cancion mas y 
+		//M√©todo que calcula media y desvio del tema de referencia y de la cancion mas y 
 		//menos parecida. Luego genera el histograma
 		
 		Vector<Integer> trackReferencia = null;
@@ -1072,7 +1120,7 @@ public class main {
 		} catch (Exception e) {}
 
 
-		Image histograma = Histograma.getInstance().crearHistograma(800,300,trackMasParecido,"Histograma Tema M·s Parecido");
+		Image histograma = Histograma.getInstance().crearHistograma(800,300,trackMasParecido,"Histograma Tema M√°s Parecido");
 		ej2Histograma.setIcon(new ImageIcon(histograma));		
 	}
 
@@ -1132,8 +1180,8 @@ public class main {
 		int returnVal = fc.showOpenDialog(frmTpTeora);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
-			Huffman.getInstance().decodificar(file.getPath());
-
+			Vector<Integer> decodificacion = Huffman.getInstance().decodificar(file.getPath());
+			ej3Decodificacion.setText(decodificacion.toString());
 		}
 	}
 	
@@ -1190,7 +1238,7 @@ public class main {
 		
 		//Creamos la JTable
 		Object nombreCols[]=new Object[headerCol.size()+1];
-		nombreCols[0]="";
+		nombreCols[0]="‚Üô";
 		for(int i = 1; i < headerCol.size() +1 ; i++){
 			nombreCols[i]=headerCol.elementAt(i-1);
 		}
@@ -1201,7 +1249,8 @@ public class main {
 		}
 		table.setModel(matrizCanal);
 		table.setDragEnabled(false);
-		TableColumn tcol = table.getColumn("");
+		table.getTableHeader().setReorderingAllowed(false);
+		TableColumn tcol = table.getColumn("‚Üô");
 		tcol.setPreferredWidth(40);
 		tcol.setMinWidth(20);
 		tcol.setMaxWidth(40);
@@ -1220,15 +1269,20 @@ public class main {
 		double d = e.simular(c,(Integer)ej5Tiradas.getValue());
 		ej5ProbabilidadEquivocacion.setText(df.format(d));
 		
+		//c)
+		Vector<Integer> recibido = e.transmitir(c, trackReferencia);
+		ej5TemaTransmitido.setText(trackReferencia.toString());
+		ej5TemaRecibido.setText(recibido.toString());
+		ej5ErrorCuadratico.setText(df.format(e.errorCuadraticoMedio(trackReferencia, recibido)));
 	}
 	
 	protected void pausa() {
-		// MÈtodo que para la canciÛn que se est· reproduciendo.
+		// M√©todo que para la canci√≥n que se est√° reproduciendo.
 		MidiPlayer.getInstance().pause();
 	}
 
 	protected void play() {
-		// MÈtodo que reproduce la canciÛn seleccionada.
+		// M√©todo que reproduce la canci√≥n seleccionada.
 		
 		MidiPlayer.getInstance().play("src/midis/"+list.getSelectedValue());
 	}

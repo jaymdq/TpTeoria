@@ -1,9 +1,8 @@
 package algoritmos;
 
-import java.util.BitSet;
 import java.util.HashMap;
 
-public abstract class ArbolAbs implements Comparable {
+public abstract class ArbolAbs implements Comparable<Object> {
 	
 	protected Double peso;
 	

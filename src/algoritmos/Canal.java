@@ -7,7 +7,7 @@ import java.util.Vector;
 public class Canal {
    private Vector<Integer> entrada = new Vector<Integer>();
    private Vector<Integer> salida = new Vector<Integer>();
-  private double[][] matrizCanal;
+   private double[][] matrizCanal;
     
    private HashMap<Integer, Double> probIn;
    //private HashMap<Integer, Double> probOut;
@@ -32,7 +32,7 @@ public class Canal {
     Collections.sort(this.entrada);
     Collections.sort(this.salida);
 
-    // Matriz acumulada
+    // Matriz Canal
    
     this.matrizCanal = new double[this.salida.size()][this.entrada.size()];
    
@@ -42,12 +42,10 @@ public class Canal {
     
     for ( int i = 0; i < this.salida.size() ; i++){
     	for ( int j = 0 ; j < this.entrada.size(); j++){
-    		this.matrizCanal[i][j] = (double) this.matrizCanal[i][j] / in.size();
+    		this.matrizCanal[i][j] = (double) this.matrizCanal[i][j] / (in.size() * this.probIn.get(this.entrada.elementAt(j)));
     	}
     }
-    
    }
-   
   
    // COLOCA UN VALOR EN EL CASILLERO DE LA ENTRADA Y LA SALIDA INDICADAS
    public void put (int entrada, int salida, double valor) {
@@ -81,18 +79,26 @@ public class Canal {
 	   double r = Math.random();
 	   int sal = 0;
 	   
-	   double p = this.probIn.get(entrada);
+	 //  double p = this.probIn.get(entrada);
 	  
-	    for (Integer i : this.salida) {
-		   double ac = this.get(entrada,i) / p;
-		   if (r < ac){
-			   sal = i;
-			   break;
+	   
+	   double[][] matAcum = getMatrizcanal();
+	   
+	   
+	   for (int i = 1 ; i < salida.size(); i++){
+		   for ( int j = 0 ; j < this.entrada.size();j++){
+			   matAcum[i][j] += matAcum[i-1][j];
 		   }
-		   else 
-			   r -= ac;
 	   }
 	   
+	   
+	    for (int i = 0 ; i < salida.size() ; i++) {
+	    	if (r < matAcum[i][this.entrada.indexOf(entrada)]){
+	    		return salida.elementAt(i);
+	    	}
+	   }
+	   
+	
 	   return sal;
    }
   

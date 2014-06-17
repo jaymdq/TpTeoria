@@ -1,3 +1,4 @@
+@SuppressWarnings("hiding")
 public class Pair<String, Double>{
    private String first;
    private double second;
